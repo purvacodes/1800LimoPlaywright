@@ -10,20 +10,23 @@ export const Locators = {
     oneWay: '//mat-option[@value="one_way"]',
     roundTrip: '//mat-option[@value="round_trip"]',
     charterTour: '//mat-option[@value="charter_tour"]',
-    TransferType: '//mat-label[contains(text(),"Transfer Type")]',
-    cityToCity: '//mat-select//span[contains(text(),"City To City ?")]',
-    cityToAirport: '//mat-select//span[contains(text(),"City To Airport ?")]',
-    airportToCity: '//mat-select//span[contains(text(),"Airport To City ?")]',
-    airportToAirport: '//mat-select//span[contains(text(),"Airport To Airport ?")]',
-    airportToCruisePort: '//mat-select//span[contains(text(),"Airport To Cruise Port ?")]',
-    cityToCruisePort: '//mat-select//span[contains(text(),"City To Cruise Port ?")]',
-    cruisePortToAirport: '//mat-select//span[contains(text(),"Cruise Port To Airport ?")]',
-    cruisePortToCity: '//mat-select//span[contains(text(),"Cruise Port To City ?")]',
+    transferType: '//mat-label[contains(text(),"Transfer Type")]',
+    cityToCity: '//mat-option//span[contains(text(),"City To City ?")]',
+    cityToAirport: '//mat-option//span[contains(text(),"City To Airport ?")]',
+    airportToCity: '//mat-option//span[contains(text(),"Airport To City ?")]',
+    airportToAirport: '//mat-option//span[contains(text(),"Airport To Airport ?")]',
+    airportToCruisePort: '//mat-option//span[contains(text(),"Airport To Cruise Port ?")]',
+    cityToCruisePort: '//mat-option//span[contains(text(),"City To Cruise Port ?")]',
+    cruisePortToAirport: '//mat-option//span[contains(text(),"Cruise Port To Airport ?")]',
+    cruisePortToCity: '//mat-option//span[contains(text(),"Cruise Port To City ?")]',
     clientAccounts: {
       individual: '//label[normalize-space()="Individual"]',
       travelAgent: '//label[normalize-space()="Travel Advisor"]',
+      travelAgentIndividual: 'input[value="travel_individual"]',
+      travelAgentLooseCustomer: 'input[value="travel_loose_customer"]',
       looseCustomer: '//label[normalize-space()="Loose Customer"]',
       selectAccount: '[formcontrolname="acc_id"]',
+      selectTravelAgentClient: '[formcontrolname="travel_client_id"]',
       selectRandom: 'div[role="option"]',
     },
     looseCustomer: {
@@ -67,17 +70,21 @@ export const Locators = {
       cancellationPolicy: '[formcontrolname="cancellation_hours"]'
     },
     bookingDetails: {
-      meetGreet:'[formcontrolname="meet_greet_choices"]',
+      meetGreet: '[formcontrolname="meet_greet_choices"]',
       numberOfVehicles: 'input[placeholder="Number of Vehicles"]',
       pickupDate: '[formcontrolname="pickup_date"]',
       pickupTime: '[formcontrolname="pickup_time"]',
       pickup: '[formcontrolname="pickup"]',
       dropoff: '[formcontrolname="dropoff"]',
-      specialInstructions: '[formcontrolname="booking_instructions"]', 
+      specialInstructions: '[formcontrolname="booking_instructions"]',
     },
     rates: {
       rateCategory: '#RateFormItem-0',
       rateBucket: 'RateFormSubItem-0'
     }
-  }
+  },
+  sideBar: {
+    createBooking: 'a[href="/admin/new-booking"]'
+  },
+
 };

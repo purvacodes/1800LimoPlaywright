@@ -1,5 +1,6 @@
 import { SignUpSignIn } from '../pages/SignUpSignIn';
 import { BookingForm} from '../pages/BookingForm';
+import { Handler} from '../pages/Handler';
 import { Cred } from './Cred';
 import { Locators } from './Locators';
 
@@ -10,5 +11,6 @@ export class ObjectFactory {
     this.locatorsObj = Locators;
     this.bookingFormObj = new BookingForm(page, this.locatorsObj);
     this.signUpSignInObj = new SignUpSignIn(page, this.credObj, this.locatorsObj);
+    this.handlerObj = new Handler(page, this.credObj, this.locatorsObj);
   }
 }
