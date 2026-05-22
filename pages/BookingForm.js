@@ -59,50 +59,64 @@ export class BookingForm {
     await this.page.locator(optionMap[transferType]).click();
   }
 
-  async selectClientAccount(clientAccount, subAccountType = null, clientName = null) {
-    await this.clientAccount.click();
-    const optionMap = {
-      individual: this.locatorsObj.bookingForm.clientAccounts.individual,
-      travelAgent: this.locatorsObj.bookingForm.clientAccounts.travelAgent,
-      looseCustomer: this.locatorsObj.bookingForm.clientAccounts.looseCustomer,
-    };
-    await this.page.locator(optionMap[clientAccount]).click();
+async selectClientAccountType(accountType) {
+  await this.clientAccount.click();
 
-    // Handle Individual account
-    if (clientAccount === 'individual' && clientName) {
-      await this.page.locator(this.locatorsObj.bookingForm.clientAccounts.selectAccount).locator('input').fill(clientName);
-      await this.page.locator('.ng-option').first().click();
-    }
+  const optionMap = {
+    individual: this.locatorsObj.bookingForm.clientAccounts.individual,
+    travelAgent: this.locatorsObj.bookingForm.clientAccounts.travelAgent,
+    looseCustomer: this.locatorsObj.bookingForm.clientAccounts.looseCustomer,
+  };
 
-    // Handle Travel Agent account
-    if (clientAccount === 'travelAgent') {
-      if (clientName) {
-        await this.page.locator(this.locatorsObj.bookingForm.clientAccounts.selectAccount).locator('input').fill(clientName);
-        await this.page.locator('.ng-option').first().click();
-      }
-
-      const subAccountMap = {
-        travelAgentIndividual: this.locatorsObj.bookingForm.clientAccounts.travelAgentIndividual,
-        travelAgentLooseCustomer: this.locatorsObj.bookingForm.clientAccounts.travelAgentLooseCustomer,
-      };
-      await this.page.locator(subAccountMap[subAccountType]).click();
-
-      if (subAccountType === 'travelAgentIndividual' && clientName) {
-        await this.page.locator(this.locatorsObj.bookingForm.clientAccounts.selectTravelAgentClient).locator('input').fill(clientName);
-        await this.page.locator('.ng-option').first().click();
-      }
-      if (subAccountType === 'travelAgentLooseCustomer') {
-           await this.fillLooseCustomerDetails();
-      }
-    }
-
-    // Handle Loose Customer account
-    if (clientAccount === 'looseCustomer') {
-      await this.fillLooseCustomerDetails();
-    }
+  if (!optionMap[accountType]) {
+    throw new Error(`Invalid account type: ${accountType}`);
   }
 
-  async fillLooseCustomerDetails() {
+  await this.page.locator(optionMap[accountType]).click();
+}
+async selectIndividualClient(clientName) {
+  const accountInput = this.page
+    .locator(this.locatorsObj.bookingForm.clientAccounts.selectAccount)
+    .locator('input');
+
+  await accountInput.fill(clientName);
+  await this.page.locator('.ng-option').first().click();
+}
+async selectTravelAgent(agentName) {
+  const accountInput = this.page
+    .locator(this.locatorsObj.bookingForm.clientAccounts.selectAccount)
+    .locator('input');
+
+  await accountInput.fill(agentName);
+  await this.page.locator('.ng-option').first().click();
+}
+async selectTravelAgentSubAccount(subAccountType) {
+  const subAccountMap = {
+    travelAgentIndividual: this.locatorsObj.bookingForm.clientAccounts.travelAgentIndividual,
+    travelAgentLooseCustomer:this.locatorsObj.bookingForm.clientAccounts.travelAgentLooseCustomer,
+  };
+
+  if (!subAccountMap[subAccountType]) {
+    throw new Error(
+      `Invalid travel agent sub account type: ${subAccountType}`
+    );
+  }
+
+  await this.page.locator(subAccountMap[subAccountType]).click();
+}
+async selectTravelAgentClient(clientName) {
+  const clientInput = this.page
+    .locator(
+      this.locatorsObj.bookingForm.clientAccounts
+        .selectTravelAgentClient
+    )
+    .locator('input');
+
+  await clientInput.fill(clientName);
+
+  await this.page.locator('.ng-option').first().click();
+}
+  async addLooseCustomer() {
     await this.page.locator(this.locatorsObj.bookingForm.looseCustomer.first_name).fill('John');
     await this.page.locator(this.locatorsObj.bookingForm.looseCustomer.middle_name).fill('M');
     await this.page.locator(this.locatorsObj.bookingForm.looseCustomer.last_name).fill('Doe');
