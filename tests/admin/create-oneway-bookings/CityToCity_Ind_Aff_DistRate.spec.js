@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { ObjectFactory } from '../utility/ObjectFactory';
+import { ObjectFactory } from '../../../utility/ObjectFactory';
 
 test('Admin login', async ({ page }) => {
   const objectFactory = new ObjectFactory(page);
@@ -7,9 +7,9 @@ test('Admin login', async ({ page }) => {
   await objectFactory.bookingFormObj.selectBookingActionToPerform();
   await objectFactory.handlerObj.handleSpinner();
   await objectFactory.bookingFormObj.selectServiceType('oneWay');
-  await objectFactory.bookingFormObj.selectTransferType('cityToAirport');
+  await objectFactory.bookingFormObj.selectTransferType('cityToCity');
   await objectFactory.bookingFormObj.selectClientAccountType('individual');
-  await objectFactory.bookingFormObj.selectIndividualClient('Purva');
+  await objectFactory.bookingFormObj.selectIndividualClient('ananya 1800limo');
   await objectFactory.bookingFormObj.selectAffiliateType('affiliate');
   await objectFactory.bookingFormObj.selectAffiliate('Skylimo');
   await page.waitForTimeout(2000);

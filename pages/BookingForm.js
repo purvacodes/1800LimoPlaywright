@@ -167,6 +167,7 @@ async selectTravelAgentClient(clientName) {
     await this.page.locator(this.locatorsObj.bookingForm.looseAffiliate.looseAffiliatePhone).fill(phone);
     await this.page.locator(this.locatorsObj.bookingForm.looseAffiliate.looseAffiliateEmail).fill(email);
   }
+  
 
 }
 
