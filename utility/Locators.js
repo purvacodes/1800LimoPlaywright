@@ -1,90 +1,138 @@
-import { spec } from "node:test/reporters";
+const fc = (name) => `[formcontrolname="${name}"]`;
+const label = (text) => `//label[normalize-space()="${text}"]`;
+const optionText = (text) => `//mat-option//span[contains(text(),"${text}")]`;
+const optionValue = (value) => `//mat-option[@value="${value}"]`;
+const inputValue = (value) => `input[value="${value}"]`;
+const placeholder = (text) => `input[placeholder="${text}"]`;
+const href = (path) => `a[href="${path}"]`;
+const id = (value) => `#${value}`;
+const matLabelContains = (text) => `//mat-label[contains(text(),"${text}")]`;
 
 export const Locators = {
-  signUpSignIn: {
-    phoneInput: '[formcontrolname="phone"]'
-  },
+    signUpSignIn: {
+        phoneInput: fc('phone')
+    },
 
-  bookingForm: {
-    serviceType: '[formcontrolname="service_type"]',
-    oneWay: '//mat-option[@value="one_way"]',
-    roundTrip: '//mat-option[@value="round_trip"]',
-    charterTour: '//mat-option[@value="charter_tour"]',
-    transferType: '//mat-label[contains(text(),"Transfer Type")]',
-    cityToCity: '//mat-option//span[contains(text(),"City To City ?")]',
-    cityToAirport: '//mat-option//span[contains(text(),"City To Airport ?")]',
-    airportToCity: '//mat-option//span[contains(text(),"Airport To City ?")]',
-    airportToAirport: '//mat-option//span[contains(text(),"Airport To Airport ?")]',
-    airportToCruisePort: '//mat-option//span[contains(text(),"Airport To Cruise Port ?")]',
-    cityToCruisePort: '//mat-option//span[contains(text(),"City To Cruise Port ?")]',
-    cruisePortToAirport: '//mat-option//span[contains(text(),"Cruise Port To Airport ?")]',
-    cruisePortToCity: '//mat-option//span[contains(text(),"Cruise Port To City ?")]',
-    clientAccounts: {
-      individual: '//label[normalize-space()="Individual"]',
-      travelAgent: '//label[normalize-space()="Travel Advisor"]',
-      travelAgentIndividual: 'input[value="travel_individual"]',
-      travelAgentLooseCustomer: 'input[value="travel_loose_customer"]',
-      looseCustomer: '//label[normalize-space()="Loose Customer"]',
-      selectAccount: '[formcontrolname="acc_id"]',
-      selectTravelAgentClient: '[formcontrolname="travel_client_id"]',
-      selectRandom: 'div[role="option"]',
+    bookingForm: {
+        serviceType: fc('service_type'),
+
+        oneWay: optionValue('one_way'),
+        roundTrip: optionValue('round_trip'),
+        charterTour: optionValue('charter_tour'),
+
+        transferType: matLabelContains('Transfer Type'),
+
+        cityToCity: optionText('City To City ?'),
+        cityToAirport: optionText('City To Airport ?'),
+        airportToCity: optionText('Airport To City ?'),
+        airportToAirport: optionText('Airport To Airport ?'),
+        airportToCruisePort: optionText('Airport To Cruise Port ?'),
+        cityToCruisePort: optionText('City To Cruise Port ?'),
+        cruisePortToAirport: optionText('Cruise Port To Airport ?'),
+        cruisePortToCity: optionText('Cruise Port To City ?'),
+
+        clientAccounts: {
+            individual: label('Individual'),
+            travelAgent: label('Travel Advisor'),
+            travelAgentIndividual: inputValue('travel_individual'),
+            travelAgentLooseCustomer: inputValue('travel_loose_customer'),
+            looseCustomer: label('Loose Customer'),
+
+            selectTravelAgentClient: fc('travel_client_id'),
+            selectAccount: fc('acc_id'),
+            selectRandom: 'div[role="option"]',
+        },
+
+        looseCustomer: {
+            first_name: fc('first_name'),
+            middle_name: fc('middle_name'),
+            last_name: fc('last_name'),
+            email: fc('email'),
+            phone: fc('phone'),
+            cardName: fc('name'),
+            cardNumber: fc('card_number'),
+            expMonth: fc('exp_month'),
+            expYear: fc('exp_year'),
+            cvv: fc('cvv')
+        },
+
+        passengerInfo: {
+            passengerName: fc('passenger_name'),
+            passengerEmail: fc('passenger_email'),
+            passengerPhone: fc('passenger_cell'),
+            totalPax: fc('total_passengers'),
+            luggageCount: fc('luggage_count')
+        },
+
+        affiliate_type: {
+            affiliate: label('Affiliate'),
+            looseAffiliate: label('Loose Affiliate')
+        },
+
+        affiliateList: fc('affiliate_id'),
+        looseAffiliateList: fc('loose_affiliate_id'),
+
+        looseAffiliate: {
+            looseAffiliateName: fc('loose_affiliate_name'),
+            looseAffiliatePhone: fc('loose_affiliate_phone'),
+            looseAffiliateEmail: fc('loose_affiliate_email')
+        },
+
+        vehiclePreference: {
+            vehicleType: fc('vehicle_type'),
+            vehicleMake: fc('vehicle_make'),
+            vehicleModel: fc('vehicle_model'),
+            vehicleYear: fc('vehicle_year'),
+            vehicleColor: fc('vehicle_color'),
+            licensePlate: fc('vehicle_license_plate'),
+            seats: fc('vehicle_seats'),
+            cancellationPolicy: fc('cancellation_hours')
+        },
+
+        bookingDetails: {
+            meetGreet: fc('meet_greet_choices'),
+            numberOfVehicles: placeholder('Number of Vehicles'),
+
+            pickupDate: fc('pickup_date'),
+            pickupTime: fc('pickup_time'),
+
+            pickupAddress: fc('pickup'),
+            dropoffAddress: fc('dropoff'),
+            returnPickupAddress: fc('return_pickup'),
+            returnDropoffAddress: fc('return_dropoff'),
+            pickupAirport: fc('pickup_airport_option'),
+            dropoffAirport: fc('dropoff_airport_option'),
+            returnPickupAirport: fc('return_pickup_airport_option'),
+            returnDropoffAirport: fc('return_dropoff_airport_option'),
+
+            pickupAirline: fc('pickup_airline_option'),
+            dropoffAirline: fc('dropoff_airline_option'),
+            returnPickupAirline: fc('return_pickup_airline_option'),    
+            returnDropoffAirline: fc('return_dropoff_airline_option'),
+
+            pickupFlight: fc('pickup_flight'),
+            dropoffFlight: fc('dropoff_flight'),
+            returnPickupFlight: fc('return_pickup_flight'),
+            returnDropoffFlight: fc('return_dropoff_flight'),
+
+            originCity: fc('origin_airport_city'),
+            destinationCity: fc('departing_airport_city'),
+           
+            bookingInstructions: fc('booking_instructions'),
+            returnBookingInstructions: fc('return_booking_instructions'),         
+            
+            totalDistance:'h6:has-text("Total Distance:")',
+            estimatedTime:'h6:has-text("Estimated Time:")'
+        },
+
+        rates: {
+            rateCategory: id('RateFormItem-0'),
+            rateBucket: id('RateFormSubItem-0')
+        }
     },
-    looseCustomer: {
-      first_name: '[formcontrolname="first_name"]',
-      middle_name: '[formcontrolname="middle_name"]',
-      last_name: '[formcontrolname="last_name"]',
-      email: '[formcontrolname="email"]',
-      phone: '[formcontrolname="phone"]',
-      cardName: '[formcontrolname="name"]',
-      cardNumber: '[formcontrolname="card_number"]',
-      expMonth: '[formcontrolname="exp_month"]',
-      expYear: '[formcontrolname="exp_year"]',
-      cvv: '[formcontrolname="cvv"]'
-    },
-    passengerInfo: {
-      passengerName: '[formcontrolname="passenger_name"]',
-      passengerEmail: '[formcontrolname="passenger_email"]',
-      passengerPhone: '[formcontrolname="passenger_cell"]',
-      totalPax: '[formcontrolname="total_passengers"]',
-      luggageCount: '[formcontrolname="luggage_count"]'
-    },
-    affiliate_type: {
-      affiliate: '//label[normalize-space()="Affiliate"]',
-      looseAffiliate: '//label[normalize-space()="Loose Affiliate"]',
-    },
-    affiliateList: '[formcontrolname="affiliate_id"]',
-    looseAffiliateList: '[formcontrolname="loose_affiliate_id"]',
-    looseAffiliate: {
-      looseAffiliateName: '[formcontrolname="loose_affiliate_name"]',
-      looseAffiliatePhone: '[formcontrolname="loose_affiliate_phone"]',
-      looseAffiliateEmail: '[formcontrolname="loose_affiliate_email"]',
-    },
-    vehiclePreference: {
-      vehicleType: '[formcontrolname="vehicle_type"]',
-      vehicleMake: '[formcontrolname="vehicle_model"]',
-      vehicleModel: '[formcontrolname="vehicle_model"]',
-      vehicleYear: '[formcontrolname="vehicle_year"]',
-      vehicleColor: '[formcontrolname="vehicle_color"]',
-      licensePlate: '[formcontrolname="vehicle_license_plate"]',
-      seats: '[formcontrolname="vehicle_seats"]',
-      cancellationPolicy: '[formcontrolname="cancellation_hours"]'
-    },
-    bookingDetails: {
-      meetGreet: '[formcontrolname="meet_greet_choices"]',
-      numberOfVehicles: 'input[placeholder="Number of Vehicles"]',
-      pickupDate: '[formcontrolname="pickup_date"]',
-      pickupTime: '[formcontrolname="pickup_time"]',
-      pickup: '[formcontrolname="pickup"]',
-      dropoff: '[formcontrolname="dropoff"]',
-      specialInstructions: '[formcontrolname="booking_instructions"]',
-    },
-    rates: {
-      rateCategory: '#RateFormItem-0',
-      rateBucket: 'RateFormSubItem-0'
+
+    bookingActions: {
+        adminCreateBooking: href('/admin/new-booking'),
+        adminEditBooking: (id) => href(`/admin/new-booking?bookingId=${id}&updateType=edit`)
     }
-  },
-  sideBar: {
-    createBooking: 'a[href="/admin/new-booking"]'
-  },
-
 };

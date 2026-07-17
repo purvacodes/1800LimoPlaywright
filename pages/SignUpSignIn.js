@@ -9,7 +9,7 @@ export class SignUpSignIn {
     const url = this.credObj.envBaseUrl.staging + this.credObj.login[userType];
 
     await this.page.goto(url, { waitUntil: "domcontentloaded" });
-
+    await this.page.waitForTimeout(4000);
     const phoneInput = this.page.locator(this.locatorsObj.signUpSignIn.phoneInput);
 
     await phoneInput.click();

@@ -12,5 +12,6 @@ export const Cred = {
     subAffiliate: '/login/sub_affiliate',
     subAdmin: '/login/sub_admin',
     admin_no : '+17087761685'
+
   }
 }; 
