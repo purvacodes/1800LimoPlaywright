@@ -4,9 +4,17 @@ export class AddBookingDetails extends BookingFormGetters {
     constructor(page, locatorsObj) {
         super(page, locatorsObj);
     }
-  
-    async selectBookingActionToPerform() {
-        await this.bookingAction.click();
+    
+    async adminCreateBooking() {
+        await this.bookingActions.adminCreateBooking.click();
+    }
+
+    async adminEditBooking(id) {
+        await this.bookingActions.adminEditBooking(id).click();
+    }
+
+    async adminRepeatBooking(id) {
+        await this.bookingActions.adminRepeatBooking(id).click();
     }
 
     async selectServiceType(type) {
@@ -38,7 +46,7 @@ export class AddBookingDetails extends BookingFormGetters {
         await accountInput.fill(agentName);
         await this.selectFirstDropdownOption();
     }
-    async selectTravelAgentSubAccount(type) {
+    async selectTravelAgentClientType(type) {
         await this.selectOption(this.clientAccounts.options, type, `Invalid travel agent sub account type: ${type}`);
     }
 
@@ -83,18 +91,18 @@ export class AddBookingDetails extends BookingFormGetters {
     }
 
     async selectAffiliateType(type) {
-        await this.selectOption(this.affiliate.options, type, 'affiliate type');
+        await this.selectOption(this.affiliate.affiliateType, type, 'affiliate type');
     }
 
-    async selectAffiliate(affiliateName) {
+    async selectAffiliate(affiliate) {
         await this.affiliate.affiliateList.click();
-        await this.affiliate.affiliateList.locator('input').fill(affiliateName);
+        await this.affiliate.affiliateList.locator('input').fill(affiliate);
         await this.selectFirstDropdownOption();
     }
 
-    async selectLooseAffiliate(looseAffiliateName) {
+    async selectLooseAffiliate(looseAffiliate) {
         await this.affiliate.looseAffiliateList.click();
-        await this.affiliate.looseAffiliateList.locator('input').fill(looseAffiliateName);
+        await this.affiliate.looseAffiliateList.locator('input').fill(looseAffiliate);
         await this.selectFirstDropdownOption();
     }
 
@@ -118,36 +126,40 @@ export class AddBookingDetails extends BookingFormGetters {
     async selectPickupAddress(address) {
         await this.bookingDetails.pickupAddress.click();
         await this.bookingDetails.pickupAddress.fill(address);
+        await this.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: address }).click();
     }
     async selectDropOffAddress(address) {
         await this.bookingDetails.dropOffAddress.click();
         await this.bookingDetails.dropOffAddress.fill(address);
+        await this.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: address }).click();
     }
     async selectPickupAirport(address) {
         await this.bookingDetails.pickupAirport.click();
         await this.bookingDetails.pickupAirport.fill(address);
+        await this.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: address }).first().click();
     }
     async selectDropOffAirport(address) {
         await this.bookingDetails.dropoffAirport.click();
         await this.bookingDetails.dropoffAirport.fill(address);
+        await this.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: address }).first().click();
     }
     async selectPickupAirline(airline) {
         await this.bookingDetails.pickupAirline.click();
         await this.bookingDetails.pickupAirline.type(airline);
         await this.page.locator('.ng-option', {
-        hasText: airline
-    }).first().click();
+            hasText: airline
+        }).first().click();
     }
     async selectDropOffAirline(airline) {
         await this.bookingDetails.dropoffAirline.click();
         await this.bookingDetails.dropoffAirline.type(airline);
         await this.page.locator('.ng-option', {
-        hasText: airline
-    }).first().click();
+            hasText: airline
+        }).first().click();
     }
 
     async selectPickupFlight(flight) {
@@ -169,6 +181,7 @@ export class AddBookingDetails extends BookingFormGetters {
     }
 
 
+
     async selectFirstDropdownOption() {
         await this.page.locator('.ng-option').first().click();
     }
@@ -181,4 +194,80 @@ export class AddBookingDetails extends BookingFormGetters {
 
         await option.click();
     }
+
+    async selectClientAccount(clientAccountType, clientName, travelAgentClientType) {
+        await this.selectClientAccountType(clientAccountType);
+
+        switch (clientAccountType) {
+            case 'individual':
+                await this.selectIndividualClient(clientName);
+                break;
+
+            case 'travelAgent':
+                await this.selectTravelAgent(clientName);
+                await this.selectTravelAgentClientType(travelAgentClientType);
+
+                switch (travelAgentClientType) {
+                    case 'individual':
+                        await this.selectTravelAgentClient(clientName);
+                        break;
+
+                    default:
+                        await this.addLooseCustomer();
+                        break;
+                }
+                break;
+            case 'looseCustomer':
+                await this.addLooseCustomer();
+                break;
+            default:
+                throw new Error(`Unsupported client account type: ${clientAccountType}`);
+        }
+    }
+
+
+    async fillBookingDetailsByTransferType(transferType, pickupAddress, pickupAirline, pickupFlight, originCity, dropOffAddress, dropOffAirline, dropOffFlight) {
+        if (!transferType) throw new Error('transferType is required');
+
+        const t = transferType.toLowerCase();
+        // Pickup
+        if (t.startsWith('city')) {
+            await this.selectPickupAddress(pickupAddress);
+        } else if (t.startsWith('airport')) {
+            await this.selectPickupAirport(pickupAddress);
+            await this.selectPickupAirline(pickupAirline);
+            await this.selectPickupFlight(pickupFlight);
+            await this.selectOriginCity(originCity);
+        } else {
+            throw new Error(`Unsupported pickup transfer type: ${transferType}`);
+        }
+
+        // Drop-off
+        if (t.endsWith('tocity')) {
+            await this.selectDropOffAddress(dropOffAddress);
+        } else if (t.endsWith('toairport')) {
+            await this.selectDropOffAirport(dropOffAddress);
+            await this.selectDropOffAirline(dropOffAirline);
+            await this.selectDropOffFlight(dropOffFlight);
+        } else {
+            throw new Error(`Unsupported drop-off transfer type: ${transferType}`);
+        }
+    }
+
+    async assignAffiliateManually(type, affiliate, looseAffiliate, looseAffiliateName, looseAffiliatePhone, looseAffiliateEmail) {
+        await this.bookingDetails.assignManually.click();
+        await this.selectAffiliateType(type);
+        if (type === 'affiliate') {
+            await this.selectAffiliate(affiliate);
+        } else if (type === 'looseAffiliate') {
+            await this.selectLooseAffiliate(looseAffiliate);
+            await this.fillLooseAffiliateDetails(looseAffiliateName, looseAffiliatePhone, looseAffiliateEmail);
+        }
+    }
+
+    async assignAffiliateWithEmbeddedQuote() {
+        await this.bookingDetails.browseVehicles.click();
+    }
+
+
 }

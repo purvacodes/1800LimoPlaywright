@@ -6,7 +6,7 @@ test('Admin login', async ({ page }) => {
   const objectFactory = new ObjectFactory(page);
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
-  await objectFactory.bookingFormObj.selectBookingActionToPerform();
+  await objectFactory.bookingFormObj.adminCreateBooking();
   await objectFactory.handlerObj.handleSpinner();
   await page.waitForTimeout(2000);
   await objectFactory.bookingFormObj.selectServiceType('oneWay');

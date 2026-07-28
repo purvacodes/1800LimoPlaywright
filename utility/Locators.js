@@ -4,9 +4,23 @@ const optionText = (text) => `//mat-option//span[contains(text(),"${text}")]`;
 const optionValue = (value) => `//mat-option[@value="${value}"]`;
 const inputValue = (value) => `input[value="${value}"]`;
 const placeholder = (text) => `input[placeholder="${text}"]`;
-const href = (path) => `a[href="${path}"]`;
+const href = (path) => `//a[@href="${path}"]`;
 const id = (value) => `#${value}`;
 const matLabelContains = (text) => `//mat-label[contains(text(),"${text}")]`;
+const btn = (text) => `//button[normalize-space()="${text}"]`;
+const rateInput = (text) =>
+    `//mat-label[normalize-space()="${text}"]` +
+    `/ancestor::mat-form-field//input`;
+
+const rateAmount = (text) =>
+    `//mat-label[normalize-space()="${text}"]` +
+    `/ancestor::div[contains(@class,"rates-row")]` +
+    `//div[contains(@class,"rate-amount")]//p`;
+
+const rateToggle = (text) =>
+    `//mat-label[normalize-space()="${text}"]` +
+    `/ancestor::div[contains(@class,"rates-row")]` +
+    `//mat-slide-toggle//button[@role="switch"]`;
 
 export const Locators = {
     signUpSignIn: {
@@ -32,7 +46,7 @@ export const Locators = {
         cruisePortToCity: optionText('Cruise Port To City ?'),
 
         clientAccounts: {
-            individual: label('Individual'),
+            individual: `(${label('Individual')})[1]`,
             travelAgent: label('Travel Advisor'),
             travelAgentIndividual: inputValue('travel_individual'),
             travelAgentLooseCustomer: inputValue('travel_loose_customer'),
@@ -107,7 +121,7 @@ export const Locators = {
 
             pickupAirline: fc('pickup_airline_option'),
             dropoffAirline: fc('dropoff_airline_option'),
-            returnPickupAirline: fc('return_pickup_airline_option'),    
+            returnPickupAirline: fc('return_pickup_airline_option'),
             returnDropoffAirline: fc('return_dropoff_airline_option'),
 
             pickupFlight: fc('pickup_flight'),
@@ -117,22 +131,133 @@ export const Locators = {
 
             originCity: fc('origin_airport_city'),
             destinationCity: fc('departing_airport_city'),
-           
-            bookingInstructions: fc('booking_instructions'),
-            returnBookingInstructions: fc('return_booking_instructions'),         
-            
-            totalDistance:'h6:has-text("Total Distance:")',
-            estimatedTime:'h6:has-text("Estimated Time:")'
-        },
 
-        rates: {
-            rateCategory: id('RateFormItem-0'),
-            rateBucket: id('RateFormSubItem-0')
-        }
+            bookingInstructions: fc('booking_instructions'),
+            returnBookingInstructions: fc('return_booking_instructions'),
+
+            totalDistance: 'h6:has-text("Total Distance:")',
+            estimatedTime: 'h6:has-text("Estimated Time:")',
+            browseVehicles: btn('Browse vehicles'),
+            assignManually: btn('Assign manually')
+        },
     },
 
     bookingActions: {
-        adminCreateBooking: href('/admin/new-booking'),
-        adminEditBooking: (id) => href(`/admin/new-booking?bookingId=${id}&updateType=edit`)
+        adminCreateBooking: href('/admin/new-booking-v2'),
+        adminEditBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=edit`),
+        adminRepeatBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=repeat`)
+
+    },
+
+    rates: {
+
+        rateCategory: id('RateFormItem-0'),
+        rateBucket: id('RateFormSubItem-0'),
+
+
+        vehicleBaseRates: {
+            section: 'h5:has-text("Vehicle Base Rates")',
+
+            baseRate: rateInput('Base Rate'),
+            stops: rateInput('Stops'),
+            wait: rateInput('Wait'),
+            earlyAmLatePmHoliday: rateInput('Early Am / Late Pm / Holiday'),
+
+            baseRateAmount: rateAmount('Base Rate'),
+            stopsAmount: rateAmount('Stops'),
+            waitAmount: rateAmount('Wait'),
+            earlyAmLatePmHolidayAmount: rateAmount('Early Am / Late Pm / Holiday')
+        },
+
+
+        tollsTaxes: {
+            section: 'h5:has-text("Tolls/Taxes")',
+
+            airportArrivalTax: rateInput('Airport Arrival Tax'),
+            airportDepartureTax: rateInput('Airport Departure Tax'),
+            seaPortTax: rateInput('Sea Port Tax'),
+            cityCongestionTax: rateInput('City Congestion Tax'),
+            cityTax: rateInput('City Tax'),
+            stateTax: rateInput('State Tax'),
+            vatTax: rateInput('Vat Tax'),
+            workmanCompTax: rateInput('Workman Comp Tax'),
+            otherTransportationTax: rateInput('Other Transportation Tax'),
+            tolls: rateInput('Tolls'),
+
+            airportArrivalTaxAmount: rateAmount('Airport Arrival Tax'),
+            airportDepartureTaxAmount: rateAmount('Airport Departure Tax'),
+            seaPortTaxAmount: rateAmount('Sea Port Tax'),
+            cityCongestionTaxAmount: rateAmount('City Congestion Tax'),
+            cityTaxAmount: rateAmount('City Tax'),
+            stateTaxAmount: rateAmount('State Tax'),
+            vatTaxAmount: rateAmount('Vat Tax'),
+            workmanCompTaxAmount: rateAmount('Workman Comp Tax'),
+            otherTransportationTaxAmount: rateAmount('Other Transportation Tax'),
+            tollsAmount: rateAmount('Tolls')
+        },
+
+
+        extraChargeAmenities: {
+            section: 'h5:has-text("Extra Charge Amenities")',
+
+            babySeat: rateInput('Baby Seat'),
+            boosterSeat: rateInput('Booster Seat'),
+            baggageMeetDomestic: rateInput('Baggage Meet (Dom)'),
+            baggageMeetInternational: rateInput('Baggage Meet (Int)'),
+            bikeRack: rateInput('Bike Rack'),
+            leiGreetingHawaii: rateInput('Lei Greeting – Hawaii'),
+            securityGuard: rateInput('Security / Guard'),
+            perDiem: rateInput('Per Diem'),
+            tourGuide: rateInput('Tour Guide'),
+            luggageTrailer: rateInput('Luggage Trailer'),
+            weddingPackage: rateInput('Wedding Package'),
+            redCarpet: rateInput('Red Carpet'),
+            skis: rateInput('Skis'),
+            golfBags: rateInput('Golf Bags'),
+
+            babySeatAmount: rateAmount('Baby Seat'),
+            boosterSeatAmount: rateAmount('Booster Seat'),
+            baggageMeetDomesticAmount: rateAmount('Baggage Meet (Dom)'),
+            baggageMeetInternationalAmount: rateAmount('Baggage Meet (Int)'),
+            bikeRackAmount: rateAmount('Bike Rack'),
+            leiGreetingHawaiiAmount: rateAmount('Lei Greeting – Hawaii'),
+            securityGuardAmount: rateAmount('Security / Guard'),
+            perDiemAmount: rateAmount('Per Diem'),
+            tourGuideAmount: rateAmount('Tour Guide'),
+            luggageTrailerAmount: rateAmount('Luggage Trailer'),
+            weddingPackageAmount: rateAmount('Wedding Package'),
+            redCarpetAmount: rateAmount('Red Carpet'),
+            skisAmount: rateAmount('Skis'),
+            golfBagsAmount: rateAmount('Golf Bags')
+        },
+
+
+        additionalMiscCharges: {
+            section: 'h5:has-text("Additional Misc. Charges")',
+
+            extraGratuity: rateInput('Extra Gratuity'),
+            parking: rateInput('Parking'),
+            barStock: rateInput('Bar Stock'),
+            miscCharges: rateInput('Misc Charges'),
+
+            extraGratuityAmount: rateAmount('Extra Gratuity'),
+            parkingAmount: rateAmount('Parking'),
+            barStockAmount: rateAmount('Bar Stock'),
+            miscChargesAmount: rateAmount('Misc Charges')
+        },
+
+
+        toggles: {
+            airportArrivalTax: rateToggle('Airport Arrival Tax'),
+            airportDepartureTax: rateToggle('Airport Departure Tax'),
+            seaPortTax: rateToggle('Sea Port Tax'),
+            cityCongestionTax: rateToggle('City Congestion Tax'),
+            cityTax: rateToggle('City Tax'),
+            stateTax: rateToggle('State Tax'),
+            vatTax: rateToggle('Vat Tax'),
+            workmanCompTax: rateToggle('Workman Comp Tax'),
+            otherTransportationTax: rateToggle('Other Transportation Tax'),
+            tolls: rateToggle('Tolls')
+        }
     }
-};
+}; 

@@ -6,27 +6,16 @@ test('Create AirportToAirport with Individual associated with affiliate having R
   const objectFactory = new ObjectFactory(page);
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
-  await objectFactory.bookingFormObj.selectBookingActionToPerform();
+  await objectFactory.bookingFormObj.adminEditBooking(3091);
   await objectFactory.handlerObj.handleSpinner();
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
   await objectFactory.bookingFormObj.selectServiceType('oneWay');
   await objectFactory.bookingFormObj.selectTransferType('airportToAirport');
-  // await objectFactory.bookingFormObj.selectClientAccountType('individual');
-  // await objectFactory.bookingFormObj.selectIndividualClient('ananya 1800limo');
-  // await page.waitForTimeout(3000);
+  await objectFactory.bookingFormObj.selectClientAccount('individual', 'ananya 1800limo');
+  await page.waitForTimeout(3000);
   // await objectFactory.bookingFormObj.fillPaxDetails('Ananya-Pax', 'ananya-pax@test.com', '+919876543210', '5', '2');
-  // await objectFactory.bookingFormObj.selectAffiliateType('affiliate');
-  // await objectFactory.bookingFormObj.selectAffiliate('Automation FLEET');
-  // await objectFactory.bookingFormObj.selectTravelDate();
-  // await objectFactory.bookingFormObj.selectPickupTime();
-  await objectFactory.bookingFormObj.selectPickupAirport('ORD');
-  await objectFactory.bookingFormObj.selectPickupAirline('GB');
-  await objectFactory.bookingFormObj.selectPickupFlight('GB98');
-  await objectFactory.bookingFormObj.selectOriginCity('Chicago');
-  await objectFactory.bookingFormObj.selectDropOffAirport('MDW');
-  await objectFactory.bookingFormObj.selectDropOffAirline('AA');
-  await objectFactory.bookingFormObj.selectDropOffFlight('AA98');
-  
-
+  // await objectFactory.bookingFormObj.fillBookingDetailsByTransferType('airportToAirport', 'ORD', 'GB', 'GB98', 'Chicago', 'MDW', 'AA', 'AA98');
+  // await objectFactory.bookingFormObj.assignAffiliateManually('affiliate', 'Automation FLEET');
+  await objectFactory.rateDistributionObj.getBaseRate();
   await page.pause();
 });
