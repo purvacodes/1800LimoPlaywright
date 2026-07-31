@@ -161,12 +161,12 @@ export const Locators = {
             baseRate: rateInput('Base Rate'),
             stops: rateInput('Stops'),
             wait: rateInput('Wait'),
-            earlyAmLatePmHoliday: rateInput('Early Am / Late Pm / Holiday'),
+            earlyAmLatePmHoliday: rateInput('Early Am / Late Pm / Holiday Charge'),
 
             baseRateAmount: rateAmount('Base Rate'),
             stopsAmount: rateAmount('Stops'),
             waitAmount: rateAmount('Wait'),
-            earlyAmLatePmHolidayAmount: rateAmount('Early Am / Late Pm / Holiday')
+            earlyAmLatePmHolidayAmount: rateAmount('Early Am / Late Pm / Holiday Charge')
         },
 
 

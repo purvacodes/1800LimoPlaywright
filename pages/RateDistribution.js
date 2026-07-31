@@ -5,12 +5,228 @@ export class RateDistribution extends BookingFormGetters {
         super(page, locatorsObj);
     }
 
-     async getBaseRate() {
+    async getAllRates() {
+        const results = {};
 
-        const rateValue = await this.rates.vehicleBaseRates.baseRate.inputValue();
-        const amountValue = await this.rates.vehicleBaseRates.baseRateAmount.innerText();
+        const sections = [
+            "vehicleBaseRates",
+            "tollsTaxes",
+            "extraChargeAmenities",
+            "additionalMiscCharges"
+        ];
 
-       console.log(`Base Rate Value: ${rateValue}`);
-       console.log(`Base Rate Amount: ${amountValue}`);
+        for (const sectionName of sections) {
+            const section = this.rates[sectionName];
+            results[sectionName] = {};
+
+            for (const key of Object.keys(section)) {
+                if (key === "section" || key.endsWith("Amount")) continue;
+
+                const rateLocator = section[key];
+                const amountLocator = section[`${key}Amount`];
+
+                const rate = await this.getRateValue(rateLocator, section.section);
+                const amount = amountLocator
+                    ? await this.getRateValue(amountLocator, section.section, true)
+                    : null;
+
+                const rateData = {
+                    rate: Number(rate || 0),
+                    amount
+                };
+
+                if (sectionName === "tollsTaxes") {
+                    const checked = await this.rates.toggles[key].getAttribute("aria-checked");
+                    rateData.type = checked === "true" ? "%" : "$";
+                }
+
+                results[sectionName][key] = rateData;
+
+                console.log(`${sectionName} -> ${key}:`, rateData);
+            }
+        }
+
+        return results;
+    }
+
+    async calculateRateDistribution(options) {
+        const rates = await this.getAllRates();
+
+        const air = this.calculateAIR(rates.vehicleBaseRates, options);
+        const tt = this.calculateTaxes(rates.tollsTaxes, air);
+        const ea = this.sumSection(rates.extraChargeAmenities);
+        const mc = this.sumSection(rates.additionalMiscCharges);
+
+        const gratuity = rates.additionalMiscCharges.extraGratuity?.rate || 0;
+
+        const shares = this.calculateShares(air, ea, gratuity, options.bookingType);
+        const subtotal = this.calculateSubtotal(air, ea, ea, mc, shares, options.bookingType);
+        const grandTotal = this.round(
+            subtotal * Number(options.vehicles || 1)
+        );
+        const affiliatePayout = this.calculateAffiliatePayout(grandTotal, shares, options.bookingType);
+        console.log("Rate Distribution Calculation:", {
+            AIR: this.round(air),
+            TT: this.round(tt),
+            EA: this.round(ea),
+            MC: this.round(mc),
+            Admin: shares.admin,
+            Farmout: shares.farmout,
+            TA: shares.ta,
+            Subtotal: subtotal,
+            GrandTotal: grandTotal,
+            AffiliatePayout: affiliatePayout
+        });
+
+        return {
+            AIR: this.round(air),
+            TT: this.round(tt),
+            EA: this.round(ea),
+            MC: this.round(mc),
+            Admin: shares.admin,
+            Farmout: shares.farmout,
+            TA: shares.ta,
+            Subtotal: subtotal,
+            GrandTotal: grandTotal,
+            AffiliatePayout: affiliatePayout
+        };
+    }
+
+    calculateAIR(vehicleBaseRates, baseRateOptions) {
+        let baseRate = vehicleBaseRates.baseRate.rate;
+
+        if (
+            baseRateOptions.tripType === "CHARTER" &&
+            !baseRateOptions.minRateApplies
+        ) {
+            baseRate *= Number(baseRateOptions.hours || 0);
+        }
+
+        return (
+            baseRate +
+            vehicleBaseRates.stops.rate +
+            vehicleBaseRates.wait.rate +
+            vehicleBaseRates.earlyAmLatePmHoliday.rate
+        );
+    }
+
+    calculateTaxes(tollsTaxes, air) {
+        let total = 0;
+
+        for (const tax of Object.values(tollsTaxes)) {
+            total += tax.type === "%"
+                ? (tax.rate / 100) * air
+                : tax.rate;
+        }
+
+        return total;
+    }
+
+    sumSection(section) {
+        return Object.values(section).reduce((sum, item) => {
+            return sum + item.rate;
+        }, 0);
+    }
+
+    calculateShares(air, ea, gratuity, bookingType) {
+        let admin = 0;
+        let farmout = 0;
+        let ta = 0;
+
+        switch (bookingType) {
+            case "NORMAL":
+                admin =
+                    (air * 0.25) +
+                    (gratuity * 0.25) +
+                    (ea * 0.25);
+                break;
+
+            case "FARMOUT":
+                farmout =
+                    (air * 0.10) +
+                    (ea * 0.10);
+
+                admin =
+                    (air * 0.15) +
+                    (gratuity * 0.25) +
+                    (ea * 0.15);
+                break;
+
+            case "TRAVEL_AGENT":
+                ta =
+                    (air * 0.10) +
+                    (ea * 0.10);
+
+                admin =
+                    (air * 0.15) +
+                    (gratuity * 0.25) +
+                    (ea * 0.15);
+                break;
+        }
+
+        return {
+            admin: this.round(admin),
+            farmout: this.round(farmout),
+            ta: this.round(ta)
+        };
+    }
+
+    calculateSubtotal(air, tt, ea, mc, shares, bookingType) {
+        let subtotal =
+            air +
+            tt +
+            ea +
+            mc +
+            shares.admin;
+
+        if (bookingType === "FARMOUT") {
+            subtotal += shares.farmout;
+        }
+
+        if (bookingType === "TRAVEL_AGENT") {
+            subtotal += shares.ta;
+        }
+
+        return this.round(subtotal);
+    }
+
+    calculateAffiliatePayout(grandTotal, shares, bookingType) {
+        let payout = grandTotal - shares.admin;
+
+        if (bookingType === "FARMOUT") {
+            payout -= shares.farmout;
+        }
+
+        if (bookingType === "TRAVEL_AGENT") {
+            payout -= shares.ta;
+        }
+
+        return this.round(payout);
+    }
+
+    async getRateValue(locator, sectionLocator, isText = false) {
+        try {
+            return isText
+                ? await locator.innerText()
+                : await locator.inputValue();
+        } catch {
+            await sectionLocator.click();
+
+            try {
+                await locator.waitFor({
+                    state: "visible",
+                    timeout: 2000
+                });
+            } catch {
+                // ignore
+            }
+
+            return isText
+                ? await locator.innerText()
+                : await locator.inputValue();
+        }
+    }
+    round(value) {
+        return Number(Number(value).toFixed(2));
     }
 }
