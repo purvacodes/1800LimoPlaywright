@@ -10,7 +10,7 @@ export class ObjectFactory {
     this.page = page;
     this.credObj = Cred;
     this.locatorsObj = Locators;
-    this.bookingFormObj = new AddBookingDetails(page, this.locatorsObj);
+    this.bookingFormObj = new AddBookingDetails(page, this.locatorsObj, this.credObj);
     this.rateDistributionObj = new RateDistribution(page, this.locatorsObj); 
     this.signUpSignInObj = new SignUpSignIn(page, this.credObj, this.locatorsObj);
     this.handlerObj = new Handler(page, this.credObj, this.locatorsObj);

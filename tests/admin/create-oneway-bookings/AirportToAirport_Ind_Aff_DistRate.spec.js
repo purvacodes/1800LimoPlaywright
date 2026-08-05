@@ -6,18 +6,21 @@ test('Create AirportToAirport with Individual associated with affiliate having R
   const objectFactory = new ObjectFactory(page);
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
-  await objectFactory.bookingFormObj.adminEditBooking(3166);
-  await objectFactory.handlerObj.handleSpinner();
-  await page.waitForTimeout(5000);
-  await objectFactory.bookingFormObj.selectServiceType('oneWay');
-  await objectFactory.bookingFormObj.selectTransferType('airportToAirport');
-  await objectFactory.bookingFormObj.selectClientAccount('individual', 'ananya 1800limo');
-  await page.waitForTimeout(3000);
-  // await objectFactory.bookingFormObj.fillPaxDetails('Ananya-Pax', 'ananya-pax@test.com', '+919876543210', '5', '2');
-  // await objectFactory.bookingFormObj.fillBookingDetailsByTransferType('airportToAirport', 'ORD', 'GB', 'GB98', 'Chicago', 'MDW', 'AA', 'AA98');
-  // await objectFactory.bookingFormObj.assignAffiliateManually('affiliate', 'Automation FLEET');
+  await objectFactory.bookingFormObj.buildBooking({
+    action: 'create',
+    handler: objectFactory.handlerObj,
+    serviceType: 'oneWay',
+    transferType: 'airportToAirport',
+    clientAccount: 'individual',
+    clientName: 'ananya 1800limo',
+    affiliate: {
+      type: 'affiliate',
+      affiliate: 'Automation FLEET'
+    },
+    waitTime: 1500
+  });
  await objectFactory.rateDistributionObj.calculateRateDistribution({
-        bookingType: "NORMAL",
+        bookingType: "Normal",
         tripType: "oneWay",
         minRateApplies: false,
         hours: 1,

@@ -4,17 +4,175 @@ export class AddBookingDetails extends BookingFormGetters {
     constructor(page, locatorsObj) {
         super(page, locatorsObj);
     }
-    
+
+    /**
+     * Build booking form from config object
+     * @param {Object} config - Booking configuration
+     * @param {string} [config.action] - create, edit, repeat
+     * @param {string} [config.bookingNumber] - booking number for search before edit/repeat
+     * @param {string} [config.serviceType] - oneWay, roundTrip, charterTour
+     * @param {string} [config.transferType] - e.g., airportToCity, cityToCity, etc.
+     * @param {string} [config.clientAccount] - individual, travelAgent, looseCustomer
+     * @param {string} [config.clientName] - Name for individual/travelAgent selection
+     * @param {string} [config.travelAgentClientType] - individual or looseCustomer (if clientAccount is travelAgent)
+     * @param {Object} [config.passengerInfo] - { name, email, phone, totalPax, luggageCount }
+     * @param {Object} [config.bookingDetails] - { pickupAddress, dropoffAddress, pickupAirport, pickupAirline, pickupFlight, etc. }
+     * @param {Object} [config.affiliate] - { type, affiliate/looseAffiliate, ...details }
+     * @param {number} [config.waitTime] - Optional wait between steps (ms)
+     * @param {Object} [config.handler] - Handler object with handleSpinner() method (e.g., objectFactory.handlerObj)
+     */
+    async buildBooking(config) {
+        const wait = config.waitTime || 1000;
+
+        if (config.action) {
+            switch (config.action) {
+                case 'create':
+                    await this.adminCreateBooking();
+                    break;
+                case 'edit':
+                    if (config.bookingNumber) {
+                        await this.searchBooking(config.bookingNumber);
+                        await this.adminEditBooking(config.bookingNumber);
+                    }
+                    break;
+                case 'repeat':
+                    if (config.bookingNumber) {
+                        await this.searchBooking(config.bookingNumber);
+                        await this.adminRepeatBooking(config.bookingNumber);
+                    }
+                    break;
+                default:
+                    throw new Error(`Unsupported action: ${config.action}`);
+            }
+
+            if (config.handler) {
+                await config.handler.handleSpinner();
+            }
+            await this.page.waitForTimeout(wait);
+        }
+
+        // Select Service Type
+        if (config.serviceType) {
+            await this.selectServiceType(config.serviceType);
+            await this.page.waitForTimeout(wait);
+        }
+
+        // Select Transfer Type
+        if (config.transferType) {
+            await this.selectTransferType(config.transferType);
+            await this.page.waitForTimeout(wait);
+        }
+
+        // Select Client Account
+        if (config.clientAccount) {
+            await this.selectClientAccount(
+                config.clientAccount,
+                config.clientName,
+                config.travelAgentClientType
+            );
+            await this.page.waitForTimeout(wait);
+        }
+
+        // Fill Passenger Info
+        if (config.passengerInfo) {
+            const pax = config.passengerInfo;
+            await this.fillPaxDetails(
+                pax.name,
+                pax.email,
+                pax.phone,
+                pax.totalPax,
+                pax.luggageCount
+            );
+            await this.page.waitForTimeout(wait);
+        }
+
+        // Fill Booking Details (Addresses, Airports, Airlines, Flights)
+        if (config.bookingDetails) {
+            const details = config.bookingDetails;
+
+            if (details.pickupAddress) {
+                await this.selectPickupAddress(details.pickupAddress);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.dropoffAddress) {
+                await this.selectDropOffAddress(details.dropoffAddress);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.pickupAirport) {
+                await this.selectPickupAirport(details.pickupAirport);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.dropoffAirport) {
+                await this.selectDropOffAirport(details.dropoffAirport);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.pickupAirline) {
+                await this.selectPickupAirline(details.pickupAirline);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.dropoffAirline) {
+                await this.selectDropOffAirline(details.dropoffAirline);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.pickupFlight) {
+                await this.selectPickupFlight(details.pickupFlight);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.dropoffFlight) {
+                await this.selectDropOffFlight(details.dropoffFlight);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.originCity) {
+                await this.selectOriginCity(details.originCity);
+                await this.page.waitForTimeout(wait);
+            }
+
+            if (details.destinationCity) {
+                await this.selectDepartingCity(details.destinationCity);
+                await this.page.waitForTimeout(wait);
+            }
+        }
+
+        // Select or Assign Affiliate
+        if (config.affiliate) {
+            const affiliate = config.affiliate;
+            await this.assignAffiliateManually(
+                affiliate.type,
+                affiliate.affiliate,
+                affiliate.looseAffiliate,
+                affiliate.looseAffiliateName,
+                affiliate.looseAffiliatePhone,
+                affiliate.looseAffiliateEmail
+            );
+            await this.page.waitForTimeout(wait);
+        }
+
+        console.log('Booking form built successfully with config:', config);
+    }
+
+    async searchBooking(bookingNumber) {
+        await this.bookingActions.search.type(bookingNumber);
+    }
+
     async adminCreateBooking() {
         await this.bookingActions.adminCreateBooking.click();
     }
 
-    async adminEditBooking(id) {
-        await this.bookingActions.adminEditBooking(id).click();
+    async adminEditBooking(bookingNumber) {
+        console.log(`Editing booking with Number: ${bookingNumber}`);
+        await this.bookingActions.adminEditBooking(bookingNumber).click();
     }
 
-    async adminRepeatBooking(id) {
-        await this.bookingActions.adminRepeatBooking(id).click();
+    async adminRepeatBooking(bookingNumber) {
+        await this.bookingActions.adminRepeatBooking(bookingNumber).click();
     }
 
     async selectServiceType(type) {
@@ -130,8 +288,8 @@ export class AddBookingDetails extends BookingFormGetters {
         await this.page.getByRole('button', { name: address }).click();
     }
     async selectDropOffAddress(address) {
-        await this.bookingDetails.dropOffAddress.click();
-        await this.bookingDetails.dropOffAddress.fill(address);
+        await this.bookingDetails.dropoffAddress.click();
+        await this.bookingDetails.dropoffAddress.fill(address);
         await this.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: address }).click();
     }

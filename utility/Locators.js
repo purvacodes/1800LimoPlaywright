@@ -17,10 +17,16 @@ const rateAmount = (text) =>
     `/ancestor::div[contains(@class,"rates-row")]` +
     `//div[contains(@class,"rate-amount")]//p`;
 
+
+const distribution = (text) =>
+    `//p[contains(normalize-space(), "${text}")]` +
+    `/ancestor::div[contains(@class, "row")]` +
+    `//div[contains(@class, "col-md-4")]`;
+    
 const rateToggle = (text) =>
     `//mat-label[normalize-space()="${text}"]` +
     `/ancestor::div[contains(@class,"rates-row")]` +
-    `//mat-slide-toggle//button[@role="switch"]`;
+    `//mat-slide-toggle`;
 
 export const Locators = {
     signUpSignIn: {
@@ -143,6 +149,7 @@ export const Locators = {
     },
 
     bookingActions: {
+        search: placeholder('Search by booking number, status, name, cell phone, vehicle type'),
         adminCreateBooking: href('/admin/new-booking-v2'),
         adminEditBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=edit`),
         adminRepeatBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=repeat`)
@@ -154,6 +161,13 @@ export const Locators = {
         rateCategory: id('RateFormItem-0'),
         rateBucket: id('RateFormSubItem-0'),
 
+        distribution: {
+            subTotal: distribution('Sub Total'),
+            grandTotal: distribution('Grand Total'),
+            admin: distribution('Admin Share'),
+            farmout: distribution('Farm out Income'),
+            ta: distribution('Travel Advisor Share')
+        },
 
         vehicleBaseRates: {
             section: 'h5:has-text("Vehicle Base Rates")',
@@ -168,7 +182,6 @@ export const Locators = {
             waitAmount: rateAmount('Wait'),
             earlyAmLatePmHolidayAmount: rateAmount('Early Am / Late Pm / Holiday Charge')
         },
-
 
         tollsTaxes: {
             section: 'h5:has-text("Tolls/Taxes")',
@@ -195,7 +208,6 @@ export const Locators = {
             otherTransportationTaxAmount: rateAmount('Other Transportation Tax'),
             tollsAmount: rateAmount('Tolls')
         },
-
 
         extraChargeAmenities: {
             section: 'h5:has-text("Extra Charge Amenities")',
@@ -231,7 +243,6 @@ export const Locators = {
             golfBagsAmount: rateAmount('Golf Bags')
         },
 
-
         additionalMiscCharges: {
             section: 'h5:has-text("Additional Misc. Charges")',
 
@@ -245,7 +256,6 @@ export const Locators = {
             barStockAmount: rateAmount('Bar Stock'),
             miscChargesAmount: rateAmount('Misc Charges')
         },
-
 
         toggles: {
             airportArrivalTax: rateToggle('Airport Arrival Tax'),

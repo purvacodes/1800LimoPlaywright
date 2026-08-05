@@ -5,6 +5,7 @@ export class BookingFormGetters {
     }
     get bookingActions() {
         return {
+            search: this.page.locator(this.locators.bookingActions.search),
             adminCreateBooking: this.page.locator(this.locators.bookingActions.adminCreateBooking),
             adminEditBooking: (id) => this.page.locator(this.locators.bookingActions.adminEditBooking(id)),
             adminRepeatBooking: (id) => this.page.locator(this.locators.bookingActions.adminRepeatBooking(id))
@@ -237,6 +238,13 @@ export class BookingFormGetters {
                     otherTransportationTax: this.page.locator(this.locators.rates.toggles.otherTransportationTax),
                     tolls: this.page.locator(this.locators.rates.toggles.tolls),
                 },
+                getDistribution: {
+                    subTotal: this.page.locator(this.locators.rates.distribution.subTotal),
+                    grandTotal: this.page.locator(this.locators.rates.distribution.grandTotal),
+                    adminShare: this.page.locator(this.locators.rates.distribution.admin),
+                    farmoutShare: this.page.locator(this.locators.rates.distribution.farmout),
+                    taShare: this.page.locator(this.locators.rates.distribution.ta),
+                }
             };
         }
     

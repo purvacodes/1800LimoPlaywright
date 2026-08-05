@@ -5,7 +5,8 @@ export class RateDistribution extends BookingFormGetters {
         super(page, locatorsObj);
     }
 
-    async getAllRates() {
+    async getBookingRates(options = {}) {
+        const bookingType = options.bookingType || "NORMAL";
         const results = {};
 
         const sections = [
@@ -45,12 +46,38 @@ export class RateDistribution extends BookingFormGetters {
                 console.log(`${sectionName} -> ${key}:`, rateData);
             }
         }
+        // Get Distribution values
+        results.distribution = {};
 
+        const distributionKeys = [
+            "subTotal",
+            "grandTotal",
+            "adminShare"
+        ];
+
+        if (bookingType === "FARMOUT") {
+            distributionKeys.push("farmoutShare");
+        }
+
+        if (bookingType === "TRAVEL_AGENT") {
+            distributionKeys.push("taShare");
+        }
+
+        for (const key of distributionKeys) {
+            const locator = this.rates.getDistribution[key];
+            const value = await locator.innerText();
+
+            results.distribution[key] = Number(
+                value.replace(/[$,%\s,]/g, "") || 0
+            );
+
+            console.log(`distribution -> ${key}:`, results.distribution[key]);
+        }
         return results;
     }
 
     async calculateRateDistribution(options) {
-        const rates = await this.getAllRates();
+        const rates = await this.getBookingRates(options);
 
         const air = this.calculateAIR(rates.vehicleBaseRates, options);
         const tt = this.calculateTaxes(rates.tollsTaxes, air);
@@ -60,7 +87,7 @@ export class RateDistribution extends BookingFormGetters {
         const gratuity = rates.additionalMiscCharges.extraGratuity?.rate || 0;
 
         const shares = this.calculateShares(air, ea, gratuity, options.bookingType);
-        const subtotal = this.calculateSubtotal(air, ea, ea, mc, shares, options.bookingType);
+        const subtotal = this.calculateSubtotal(air, tt, ea, mc, shares, options.bookingType);
         const grandTotal = this.round(
             subtotal * Number(options.vehicles || 1)
         );
@@ -127,7 +154,7 @@ export class RateDistribution extends BookingFormGetters {
             return sum + item.rate;
         }, 0);
     }
-
+    //BASE RATE IN PREVIEW IS not just the AIR, Its AIR + 25%(AIR) + 25%(GRATUITY) + 25%(EA) WHICH HELPS in calculating shares
     calculateShares(air, ea, gratuity, bookingType) {
         let admin = 0;
         let farmout = 0;
