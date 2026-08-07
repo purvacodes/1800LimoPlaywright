@@ -1,6 +1,6 @@
 import { BookingFormGetters } from '../utility/BookingFormGetters';
 
-export class AddBookingDetails extends BookingFormGetters {
+export class BuildBooking extends BookingFormGetters {
     constructor(page, locatorsObj) {
         super(page, locatorsObj);
     }
@@ -51,19 +51,16 @@ export class AddBookingDetails extends BookingFormGetters {
             await this.page.waitForTimeout(wait);
         }
 
-        // Select Service Type
         if (config.serviceType) {
             await this.selectServiceType(config.serviceType);
             await this.page.waitForTimeout(wait);
         }
 
-        // Select Transfer Type
         if (config.transferType) {
             await this.selectTransferType(config.transferType);
             await this.page.waitForTimeout(wait);
         }
 
-        // Select Client Account
         if (config.clientAccount) {
             await this.selectClientAccount(
                 config.clientAccount,
@@ -73,7 +70,6 @@ export class AddBookingDetails extends BookingFormGetters {
             await this.page.waitForTimeout(wait);
         }
 
-        // Fill Passenger Info
         if (config.passengerInfo) {
             const pax = config.passengerInfo;
             await this.fillPaxDetails(
@@ -86,7 +82,6 @@ export class AddBookingDetails extends BookingFormGetters {
             await this.page.waitForTimeout(wait);
         }
 
-        // Fill Booking Details (Addresses, Airports, Airlines, Flights)
         if (config.bookingDetails) {
             const details = config.bookingDetails;
 
@@ -95,18 +90,8 @@ export class AddBookingDetails extends BookingFormGetters {
                 await this.page.waitForTimeout(wait);
             }
 
-            if (details.dropoffAddress) {
-                await this.selectDropOffAddress(details.dropoffAddress);
-                await this.page.waitForTimeout(wait);
-            }
-
             if (details.pickupAirport) {
                 await this.selectPickupAirport(details.pickupAirport);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.dropoffAirport) {
-                await this.selectDropOffAirport(details.dropoffAirport);
                 await this.page.waitForTimeout(wait);
             }
 
@@ -114,24 +99,30 @@ export class AddBookingDetails extends BookingFormGetters {
                 await this.selectPickupAirline(details.pickupAirline);
                 await this.page.waitForTimeout(wait);
             }
+            if (details.pickupFlight) {
+                await this.selectPickupFlight(details.pickupFlight);
+                await this.page.waitForTimeout(wait);
+            }
+            if (details.originCity) {
+                await this.selectOriginCity(details.originCity);
+                await this.page.waitForTimeout(wait);
+            }
 
+            if (details.dropoffAddress) {
+                await this.selectDropOffAddress(details.dropoffAddress);
+                await this.page.waitForTimeout(wait);
+            }
+            if (details.dropoffAirport) {
+                await this.selectDropOffAirport(details.dropoffAirport);
+                await this.page.waitForTimeout(wait);
+            }
             if (details.dropoffAirline) {
                 await this.selectDropOffAirline(details.dropoffAirline);
                 await this.page.waitForTimeout(wait);
             }
 
-            if (details.pickupFlight) {
-                await this.selectPickupFlight(details.pickupFlight);
-                await this.page.waitForTimeout(wait);
-            }
-
             if (details.dropoffFlight) {
                 await this.selectDropOffFlight(details.dropoffFlight);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.originCity) {
-                await this.selectOriginCity(details.originCity);
                 await this.page.waitForTimeout(wait);
             }
 
@@ -141,7 +132,6 @@ export class AddBookingDetails extends BookingFormGetters {
             }
         }
 
-        // Select or Assign Affiliate
         if (config.affiliate) {
             const affiliate = config.affiliate;
             await this.assignAffiliateManually(
@@ -155,7 +145,6 @@ export class AddBookingDetails extends BookingFormGetters {
             await this.page.waitForTimeout(wait);
         }
 
-        console.log('Booking form built successfully with config:', config);
     }
 
     async searchBooking(bookingNumber) {
@@ -249,7 +238,8 @@ export class AddBookingDetails extends BookingFormGetters {
     }
 
     async selectAffiliateType(type) {
-        await this.selectOption(this.affiliate.affiliateType, type, 'affiliate type');
+        console.log(`Selecting affiliate type: ${type}`);
+        await this.selectOption(this.affiliate.options, type, 'affiliate type');
     }
 
     async selectAffiliate(affiliate) {
@@ -337,19 +327,14 @@ export class AddBookingDetails extends BookingFormGetters {
         await this.bookingDetails.destinationCity.click();
         await this.bookingDetails.destinationCity.fill(city);
     }
-
-
-
     async selectFirstDropdownOption() {
         await this.page.locator('.ng-option').first().click();
     }
     async selectOption(options, type, errorMessage) {
         const option = options[type];
-
         if (!option) {
             throw new Error(errorMessage);
         }
-
         await option.click();
     }
 
@@ -414,6 +399,7 @@ export class AddBookingDetails extends BookingFormGetters {
 
     async assignAffiliateManually(type, affiliate, looseAffiliate, looseAffiliateName, looseAffiliatePhone, looseAffiliateEmail) {
         await this.bookingDetails.assignManually.click();
+        console.log(`Assigning affiliate manually with type: ${type}, affiliate: ${affiliate}, looseAffiliate: ${looseAffiliate}`);
         await this.selectAffiliateType(type);
         if (type === 'affiliate') {
             await this.selectAffiliate(affiliate);
@@ -427,5 +413,26 @@ export class AddBookingDetails extends BookingFormGetters {
         await this.bookingDetails.browseVehicles.click();
     }
 
+    async previewBooking() {
+        await this.bookingActions.previewBooking.first().click();
+    }
+
+    async savePreview() {
+        await this.bookingActions.savePreview.click();
+    }
+
+    async getPreviewBookingDetails() {
+        await this.previewBooking();
+
+        const adminShareValue = await this.previewBookingInfo.adminShare.textContent();
+    
+
+        const parseCurrency = (value) =>
+            Number((value || '').replace(/[$,%\s]/g, '') || 0);
+        return {
+
+            adminShare: parseCurrency(adminShareValue)
+        };
+    }
 
 }

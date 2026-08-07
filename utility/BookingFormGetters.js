@@ -8,9 +8,19 @@ export class BookingFormGetters {
             search: this.page.locator(this.locators.bookingActions.search),
             adminCreateBooking: this.page.locator(this.locators.bookingActions.adminCreateBooking),
             adminEditBooking: (id) => this.page.locator(this.locators.bookingActions.adminEditBooking(id)),
-            adminRepeatBooking: (id) => this.page.locator(this.locators.bookingActions.adminRepeatBooking(id))
+            adminRepeatBooking: (id) => this.page.locator(this.locators.bookingActions.adminRepeatBooking(id)),
+            previewBooking: this.page.locator(this.locators.bookingActions.previewBooking),
+            savePreview: this.page.locator(this.locators.bookingActions.savePreview)
         };
     }
+
+    get previewBookingInfo() {
+        return {
+            baseRate: this.page.locator(this.locators.previewBookingInfo.baseRate),
+            adminShare: this.page.locator(this.locators.previewBookingInfo.adminShare)
+        };
+    }
+
     get serviceType() {
         return {
             dropdown: this.page.locator(this.locators.bookingForm.serviceType),
@@ -73,6 +83,14 @@ export class BookingFormGetters {
                 travelAgentIndividual: this.page.locator(this.locators.bookingForm.clientAccounts.travelAgentIndividual),
                 travelAgentLooseCustomer: this.page.locator(this.locators.bookingForm.clientAccounts.travelAgentLooseCustomer),
             }
+        };
+    }
+
+    get accountListing() {
+        return {
+            clientAccount: this.page.locator(this.locators.bookingForm.accountListing.clientAccount),
+            affiliate: this.page.locator(this.locators.bookingForm.accountListing.affiliate),
+            accountDropdownSelectedValue: this.page.locator(this.locators.bookingForm.accountListing.accountDropdownSelectedValue),
         };
     }
 
@@ -145,107 +163,111 @@ export class BookingFormGetters {
             returnBookingInstructions: this.page.locator(this.locators.bookingForm.bookingDetails.returnBookingInstructions),
             totalDistance: this.page.locator(this.locators.bookingForm.bookingDetails.totalDistance),
             estimatedTime: this.page.locator(this.locators.bookingForm.bookingDetails.estimatedTime),
+            browseVehicles: this.page.locator(this.locators.bookingForm.bookingDetails.browseVehicles),
+            assignManually: this.page.locator(this.locators.bookingForm.bookingDetails.assignManually),
         };
     }
 
-        get rates() {
-            return {
-                vehicleBaseRates: {
-                    section: this.page.locator(this.locators.rates.vehicleBaseRates.section),
-                    baseRate: this.page.locator(this.locators.rates.vehicleBaseRates.baseRate),
-                    stops: this.page.locator(this.locators.rates.vehicleBaseRates.stops),
-                    wait: this.page.locator(this.locators.rates.vehicleBaseRates.wait),
-                    earlyAmLatePmHoliday: this.page.locator(this.locators.rates.vehicleBaseRates.earlyAmLatePmHoliday),
-                    baseRateAmount: this.page.locator(this.locators.rates.vehicleBaseRates.baseRateAmount),
-                    stopsAmount: this.page.locator(this.locators.rates.vehicleBaseRates.stopsAmount),
-                    waitAmount: this.page.locator(this.locators.rates.vehicleBaseRates.waitAmount),
-                    earlyAmLatePmHolidayAmount: this.page.locator(this.locators.rates.vehicleBaseRates.earlyAmLatePmHolidayAmount),
-                },
-                tollsTaxes: {
-                    section: this.page.locator(this.locators.rates.tollsTaxes.section),
-                    airportArrivalTax: this.page.locator(this.locators.rates.tollsTaxes.airportArrivalTax),
-                    airportDepartureTax: this.page.locator(this.locators.rates.tollsTaxes.airportDepartureTax),
-                    seaPortTax: this.page.locator(this.locators.rates.tollsTaxes.seaPortTax),
-                    cityCongestionTax: this.page.locator(this.locators.rates.tollsTaxes.cityCongestionTax),
-                    cityTax: this.page.locator(this.locators.rates.tollsTaxes.cityTax),
-                    stateTax: this.page.locator(this.locators.rates.tollsTaxes.stateTax),
-                    vatTax: this.page.locator(this.locators.rates.tollsTaxes.vatTax),
-                    workmanCompTax: this.page.locator(this.locators.rates.tollsTaxes.workmanCompTax),
-                    otherTransportationTax: this.page.locator(this.locators.rates.tollsTaxes.otherTransportationTax),
-                    tolls: this.page.locator(this.locators.rates.tollsTaxes.tolls),
-                    airportArrivalTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.airportArrivalTaxAmount),
-                    airportDepartureTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.airportDepartureTaxAmount),
-                    seaPortTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.seaPortTaxAmount),
-                    cityCongestionTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.cityCongestionTaxAmount),
-                    cityTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.cityTaxAmount),
-                    stateTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.stateTaxAmount),
-                    vatTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.vatTaxAmount),
-                    workmanCompTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.workmanCompTaxAmount),
-                    otherTransportationTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.otherTransportationTaxAmount),
-                    tollsAmount: this.page.locator(this.locators.rates.tollsTaxes.tollsAmount),
-                },
-                extraChargeAmenities: {
-                    section: this.page.locator(this.locators.rates.extraChargeAmenities.section),
-                    babySeat: this.page.locator(this.locators.rates.extraChargeAmenities.babySeat),
-                    boosterSeat: this.page.locator(this.locators.rates.extraChargeAmenities.boosterSeat),
-                    baggageMeetDomestic: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetDomestic),
-                    baggageMeetInternational: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetInternational),
-                    bikeRack: this.page.locator(this.locators.rates.extraChargeAmenities.bikeRack),
-                    leiGreetingHawaii: this.page.locator(this.locators.rates.extraChargeAmenities.leiGreetingHawaii),
-                    securityGuard: this.page.locator(this.locators.rates.extraChargeAmenities.securityGuard),
-                    perDiem: this.page.locator(this.locators.rates.extraChargeAmenities.perDiem),
-                    tourGuide: this.page.locator(this.locators.rates.extraChargeAmenities.tourGuide),
-                    luggageTrailer: this.page.locator(this.locators.rates.extraChargeAmenities.luggageTrailer),
-                    weddingPackage: this.page.locator(this.locators.rates.extraChargeAmenities.weddingPackage),
-                    redCarpet: this.page.locator(this.locators.rates.extraChargeAmenities.redCarpet),
-                    skis: this.page.locator(this.locators.rates.extraChargeAmenities.skis),
-                    golfBags: this.page.locator(this.locators.rates.extraChargeAmenities.golfBags),
-                    babySeatAmount: this.page.locator(this.locators.rates.extraChargeAmenities.babySeatAmount),
-                    boosterSeatAmount: this.page.locator(this.locators.rates.extraChargeAmenities.boosterSeatAmount),
-                    baggageMeetDomesticAmount: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetDomesticAmount),
-                    baggageMeetInternationalAmount: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetInternationalAmount),
-                    bikeRackAmount: this.page.locator(this.locators.rates.extraChargeAmenities.bikeRackAmount),
-                    leiGreetingHawaiiAmount: this.page.locator(this.locators.rates.extraChargeAmenities.leiGreetingHawaiiAmount),
-                    securityGuardAmount: this.page.locator(this.locators.rates.extraChargeAmenities.securityGuardAmount),
-                    perDiemAmount: this.page.locator(this.locators.rates.extraChargeAmenities.perDiemAmount),
-                    tourGuideAmount: this.page.locator(this.locators.rates.extraChargeAmenities.tourGuideAmount),
-                    luggageTrailerAmount: this.page.locator(this.locators.rates.extraChargeAmenities.luggageTrailerAmount),
-                    weddingPackageAmount: this.page.locator(this.locators.rates.extraChargeAmenities.weddingPackageAmount),
-                    redCarpetAmount: this.page.locator(this.locators.rates.extraChargeAmenities.redCarpetAmount),
-                    skisAmount: this.page.locator(this.locators.rates.extraChargeAmenities.skisAmount),
-                    golfBagsAmount: this.page.locator(this.locators.rates.extraChargeAmenities.golfBagsAmount),
-                },
-                additionalMiscCharges: {
-                    section: this.page.locator(this.locators.rates.additionalMiscCharges.section),
-                    extraGratuity: this.page.locator(this.locators.rates.additionalMiscCharges.extraGratuity),
-                    parking: this.page.locator(this.locators.rates.additionalMiscCharges.parking),
-                    barStock: this.page.locator(this.locators.rates.additionalMiscCharges.barStock),
-                    miscCharges: this.page.locator(this.locators.rates.additionalMiscCharges.miscCharges),
-                    extraGratuityAmount: this.page.locator(this.locators.rates.additionalMiscCharges.extraGratuityAmount),
-                    parkingAmount: this.page.locator(this.locators.rates.additionalMiscCharges.parkingAmount),
-                    barStockAmount: this.page.locator(this.locators.rates.additionalMiscCharges.barStockAmount),
-                    miscChargesAmount: this.page.locator(this.locators.rates.additionalMiscCharges.miscChargesAmount),
-                },
-                toggles: {
-                    airportArrivalTax: this.page.locator(this.locators.rates.toggles.airportArrivalTax),
-                    airportDepartureTax: this.page.locator(this.locators.rates.toggles.airportDepartureTax),
-                    seaPortTax: this.page.locator(this.locators.rates.toggles.seaPortTax),
-                    cityCongestionTax: this.page.locator(this.locators.rates.toggles.cityCongestionTax),
-                    cityTax: this.page.locator(this.locators.rates.toggles.cityTax),
-                    stateTax: this.page.locator(this.locators.rates.toggles.stateTax),
-                    vatTax: this.page.locator(this.locators.rates.toggles.vatTax),
-                    workmanCompTax: this.page.locator(this.locators.rates.toggles.workmanCompTax),
-                    otherTransportationTax: this.page.locator(this.locators.rates.toggles.otherTransportationTax),
-                    tolls: this.page.locator(this.locators.rates.toggles.tolls),
-                },
-                getDistribution: {
-                    subTotal: this.page.locator(this.locators.rates.distribution.subTotal),
-                    grandTotal: this.page.locator(this.locators.rates.distribution.grandTotal),
-                    adminShare: this.page.locator(this.locators.rates.distribution.admin),
-                    farmoutShare: this.page.locator(this.locators.rates.distribution.farmout),
-                    taShare: this.page.locator(this.locators.rates.distribution.ta),
-                }
-            };
-        }
-    
+    get rates() {
+        return {
+            rateCategory: this.page.locator(this.locators.rates.rateCategory),
+            rateBucket: this.page.locator(this.locators.rates.rateBucket),
+            vehicleBaseRates: {
+                section: this.page.locator(this.locators.rates.vehicleBaseRates.section),
+                baseRate: this.page.locator(this.locators.rates.vehicleBaseRates.baseRate),
+                stops: this.page.locator(this.locators.rates.vehicleBaseRates.stops),
+                wait: this.page.locator(this.locators.rates.vehicleBaseRates.wait),
+                earlyAmLatePmHoliday: this.page.locator(this.locators.rates.vehicleBaseRates.earlyAmLatePmHoliday),
+                baseRateAmount: this.page.locator(this.locators.rates.vehicleBaseRates.baseRateAmount),
+                stopsAmount: this.page.locator(this.locators.rates.vehicleBaseRates.stopsAmount),
+                waitAmount: this.page.locator(this.locators.rates.vehicleBaseRates.waitAmount),
+                earlyAmLatePmHolidayAmount: this.page.locator(this.locators.rates.vehicleBaseRates.earlyAmLatePmHolidayAmount),
+            },
+            tollsTaxes: {
+                section: this.page.locator(this.locators.rates.tollsTaxes.section),
+                airportArrivalTax: this.page.locator(this.locators.rates.tollsTaxes.airportArrivalTax),
+                airportDepartureTax: this.page.locator(this.locators.rates.tollsTaxes.airportDepartureTax),
+                seaPortTax: this.page.locator(this.locators.rates.tollsTaxes.seaPortTax),
+                cityCongestionTax: this.page.locator(this.locators.rates.tollsTaxes.cityCongestionTax),
+                cityTax: this.page.locator(this.locators.rates.tollsTaxes.cityTax),
+                stateTax: this.page.locator(this.locators.rates.tollsTaxes.stateTax),
+                vatTax: this.page.locator(this.locators.rates.tollsTaxes.vatTax),
+                workmanCompTax: this.page.locator(this.locators.rates.tollsTaxes.workmanCompTax),
+                otherTransportationTax: this.page.locator(this.locators.rates.tollsTaxes.otherTransportationTax),
+                tolls: this.page.locator(this.locators.rates.tollsTaxes.tolls),
+                airportArrivalTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.airportArrivalTaxAmount),
+                airportDepartureTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.airportDepartureTaxAmount),
+                seaPortTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.seaPortTaxAmount),
+                cityCongestionTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.cityCongestionTaxAmount),
+                cityTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.cityTaxAmount),
+                stateTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.stateTaxAmount),
+                vatTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.vatTaxAmount),
+                workmanCompTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.workmanCompTaxAmount),
+                otherTransportationTaxAmount: this.page.locator(this.locators.rates.tollsTaxes.otherTransportationTaxAmount),
+                tollsAmount: this.page.locator(this.locators.rates.tollsTaxes.tollsAmount),
+            },
+            extraChargeAmenities: {
+                section: this.page.locator(this.locators.rates.extraChargeAmenities.section),
+                babySeat: this.page.locator(this.locators.rates.extraChargeAmenities.babySeat),
+                boosterSeat: this.page.locator(this.locators.rates.extraChargeAmenities.boosterSeat),
+                baggageMeetDomestic: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetDomestic),
+                baggageMeetInternational: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetInternational),
+                bikeRack: this.page.locator(this.locators.rates.extraChargeAmenities.bikeRack),
+                leiGreetingHawaii: this.page.locator(this.locators.rates.extraChargeAmenities.leiGreetingHawaii),
+                securityGuard: this.page.locator(this.locators.rates.extraChargeAmenities.securityGuard),
+                perDiem: this.page.locator(this.locators.rates.extraChargeAmenities.perDiem),
+                tourGuide: this.page.locator(this.locators.rates.extraChargeAmenities.tourGuide),
+                luggageTrailer: this.page.locator(this.locators.rates.extraChargeAmenities.luggageTrailer),
+                weddingPackage: this.page.locator(this.locators.rates.extraChargeAmenities.weddingPackage),
+                redCarpet: this.page.locator(this.locators.rates.extraChargeAmenities.redCarpet),
+                skis: this.page.locator(this.locators.rates.extraChargeAmenities.skis),
+                golfBags: this.page.locator(this.locators.rates.extraChargeAmenities.golfBags),
+                babySeatAmount: this.page.locator(this.locators.rates.extraChargeAmenities.babySeatAmount),
+                boosterSeatAmount: this.page.locator(this.locators.rates.extraChargeAmenities.boosterSeatAmount),
+                baggageMeetDomesticAmount: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetDomesticAmount),
+                baggageMeetInternationalAmount: this.page.locator(this.locators.rates.extraChargeAmenities.baggageMeetInternationalAmount),
+                bikeRackAmount: this.page.locator(this.locators.rates.extraChargeAmenities.bikeRackAmount),
+                leiGreetingHawaiiAmount: this.page.locator(this.locators.rates.extraChargeAmenities.leiGreetingHawaiiAmount),
+                securityGuardAmount: this.page.locator(this.locators.rates.extraChargeAmenities.securityGuardAmount),
+                perDiemAmount: this.page.locator(this.locators.rates.extraChargeAmenities.perDiemAmount),
+                tourGuideAmount: this.page.locator(this.locators.rates.extraChargeAmenities.tourGuideAmount),
+                luggageTrailerAmount: this.page.locator(this.locators.rates.extraChargeAmenities.luggageTrailerAmount),
+                weddingPackageAmount: this.page.locator(this.locators.rates.extraChargeAmenities.weddingPackageAmount),
+                redCarpetAmount: this.page.locator(this.locators.rates.extraChargeAmenities.redCarpetAmount),
+                skisAmount: this.page.locator(this.locators.rates.extraChargeAmenities.skisAmount),
+                golfBagsAmount: this.page.locator(this.locators.rates.extraChargeAmenities.golfBagsAmount),
+            },
+            additionalMiscCharges: {
+                section: this.page.locator(this.locators.rates.additionalMiscCharges.section),
+                extraGratuity: this.page.locator(this.locators.rates.additionalMiscCharges.extraGratuity),
+                parking: this.page.locator(this.locators.rates.additionalMiscCharges.parking),
+                barStock: this.page.locator(this.locators.rates.additionalMiscCharges.barStock),
+                miscCharges: this.page.locator(this.locators.rates.additionalMiscCharges.miscCharges),
+                extraGratuityAmount: this.page.locator(this.locators.rates.additionalMiscCharges.extraGratuityAmount),
+                parkingAmount: this.page.locator(this.locators.rates.additionalMiscCharges.parkingAmount),
+                barStockAmount: this.page.locator(this.locators.rates.additionalMiscCharges.barStockAmount),
+                miscChargesAmount: this.page.locator(this.locators.rates.additionalMiscCharges.miscChargesAmount),
+            },
+            toggles: {
+                airportArrivalTax: this.page.locator(this.locators.rates.toggles.airportArrivalTax),
+                airportDepartureTax: this.page.locator(this.locators.rates.toggles.airportDepartureTax),
+                seaPortTax: this.page.locator(this.locators.rates.toggles.seaPortTax),
+                cityCongestionTax: this.page.locator(this.locators.rates.toggles.cityCongestionTax),
+                cityTax: this.page.locator(this.locators.rates.toggles.cityTax),
+                stateTax: this.page.locator(this.locators.rates.toggles.stateTax),
+                vatTax: this.page.locator(this.locators.rates.toggles.vatTax),
+                workmanCompTax: this.page.locator(this.locators.rates.toggles.workmanCompTax),
+                otherTransportationTax: this.page.locator(this.locators.rates.toggles.otherTransportationTax),
+                tolls: this.page.locator(this.locators.rates.toggles.tolls),
+            },
+            getDistribution: {
+                subTotal: this.page.locator(this.locators.rates.distribution.subTotal),
+                grandTotal: this.page.locator(this.locators.rates.distribution.grandTotal),
+                adminShare: this.page.locator(this.locators.rates.distribution.admin),
+                farmoutShare: this.page.locator(this.locators.rates.distribution.farmout),
+                taShare: this.page.locator(this.locators.rates.distribution.ta),
+            }
+        };
+    }
+
 }

@@ -16,6 +16,9 @@ export class RateDistribution extends BookingFormGetters {
             "additionalMiscCharges"
         ];
 
+        const parseCurrency = (value) =>
+            Number((value || '').replace(/[$,%\s]/g, '') || 0);
+
         for (const sectionName of sections) {
             const section = this.rates[sectionName];
             results[sectionName] = {};
@@ -27,13 +30,13 @@ export class RateDistribution extends BookingFormGetters {
                 const amountLocator = section[`${key}Amount`];
 
                 const rate = await this.getRateValue(rateLocator, section.section);
-                const amount = amountLocator
+                const rawAmount = amountLocator
                     ? await this.getRateValue(amountLocator, section.section, true)
                     : null;
 
                 const rateData = {
                     rate: Number(rate || 0),
-                    amount
+                    amount: rawAmount != null ? parseCurrency(rawAmount) : null
                 };
 
                 if (sectionName === "tollsTaxes") {

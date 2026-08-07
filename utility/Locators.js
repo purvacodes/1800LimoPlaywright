@@ -4,9 +4,10 @@ const optionText = (text) => `//mat-option//span[contains(text(),"${text}")]`;
 const optionValue = (value) => `//mat-option[@value="${value}"]`;
 const inputValue = (value) => `input[value="${value}"]`;
 const placeholder = (text) => `input[placeholder="${text}"]`;
+const dropdownWithPlaceholder = (text) => `.ng-value-container:has(.ng-placeholder:has-text("${text}"))`;
 const href = (path) => `//a[@href="${path}"]`;
 const id = (value) => `#${value}`;
-const matLabelContains = (text) => `//mat-label[contains(text(),"${text}")]`;
+const matLabelContains = (text) => `//mat-label[normalize-space()="${text}"]/ancestor::mat-form-field[1]//mat-select`;
 const btn = (text) => `//button[normalize-space()="${text}"]`;
 const rateInput = (text) =>
     `//mat-label[normalize-space()="${text}"]` +
@@ -22,7 +23,12 @@ const distribution = (text) =>
     `//p[contains(normalize-space(), "${text}")]` +
     `/ancestor::div[contains(@class, "row")]` +
     `//div[contains(@class, "col-md-4")]`;
-    
+
+const previewScreen = (text) =>
+    `//span[normalize-space()="${text}"]` +
+    `/ancestor::div[contains(@class,'row')]` +
+    `//span[contains(@class,'preview-output-field')]`;
+
 const rateToggle = (text) =>
     `//mat-label[normalize-space()="${text}"]` +
     `/ancestor::div[contains(@class,"rates-row")]` +
@@ -146,14 +152,27 @@ export const Locators = {
             browseVehicles: btn('Browse vehicles'),
             assignManually: btn('Assign manually')
         },
+
+        accountListing: {
+            clientAccount:  dropdownWithPlaceholder('Select Client Account'),
+            affiliate: dropdownWithPlaceholder('Select Affiliate'),
+            accountDropdownSelectedValue: '.ng-value .ng-value-label',
+        }
     },
 
     bookingActions: {
         search: placeholder('Search by booking number, status, name, cell phone, vehicle type'),
         adminCreateBooking: href('/admin/new-booking-v2'),
         adminEditBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=edit`),
-        adminRepeatBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=repeat`)
+        adminRepeatBooking: (id) => href(`/admin/new-booking-v2?bookingId=${id}&updateType=repeat`),
+        previewBooking: btn('Preview'),
+        savePreview: btn('Save')
+    },
 
+    previewBookingInfo: {
+        adminShare: previewScreen('Admin Share'),
+        TotalClientCost: previewScreen('Total Client Cost'),
+        AffiliatePayout: previewScreen('Affliate Payout'),
     },
 
     rates: {

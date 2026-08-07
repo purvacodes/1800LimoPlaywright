@@ -6,16 +6,23 @@ test('Create AirportToAirport with Individual associated with affiliate having R
   const objectFactory = new ObjectFactory(page);
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
-  await objectFactory.bookingFormObj.buildBooking({
+  await objectFactory.buildBookingObj.buildBooking({
     action: 'create',
     handler: objectFactory.handlerObj,
     serviceType: 'oneWay',
-    transferType: 'airportToAirport',
+    transferType: 'airportToCity',
     clientAccount: 'individual',
     clientName: 'ananya 1800limo',
+      bookingDetails: {
+      pickupAirport: 'ORD',
+      pickupAirline: 'AA',
+      pickupFlight: 'AA98',
+      originCity: 'Chicago',
+      dropoffAddress: 'Downtown Chicago'
+    },
     affiliate: {
       type: 'affiliate',
-      affiliate: 'Automation FLEET'
+      affiliate: 'AutomatedWithPlaywright'
     },
     waitTime: 1500
   });
@@ -26,5 +33,6 @@ test('Create AirportToAirport with Individual associated with affiliate having R
         hours: 1,
         vehicles: 1
     });
+  await objectFactory.buildBookingObj.getPreviewBookingDetails();
   await page.pause();
 });
