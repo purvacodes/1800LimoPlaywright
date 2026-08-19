@@ -6,7 +6,7 @@ export class RateDistribution extends BookingFormGetters {
     }
 
     async getBookingRates(options = {}) {
-        const bookingType = options.bookingType || "NORMAL";
+        const thirdPartyShare = options.thirdPartyShare || "none";
         const results = {};
 
         const sections = [
@@ -58,11 +58,11 @@ export class RateDistribution extends BookingFormGetters {
             "adminShare"
         ];
 
-        if (bookingType === "FARMOUT") {
+        if (thirdPartyShare === "farmout") {
             distributionKeys.push("farmoutShare");
         }
 
-        if (bookingType === "TRAVEL_AGENT") {
+        if (thirdPartyShare === "travel") {
             distributionKeys.push("taShare");
         }
 
@@ -89,12 +89,12 @@ export class RateDistribution extends BookingFormGetters {
 
         const gratuity = rates.additionalMiscCharges.extraGratuity?.rate || 0;
 
-        const shares = this.calculateShares(air, ea, gratuity, options.bookingType);
-        const subtotal = this.calculateSubtotal(air, tt, ea, mc, shares, options.bookingType);
+        const shares = this.calculateShares(air, ea, gratuity, options.thirdPartyShare);
+        const subtotal = this.calculateSubtotal(air, tt, ea, mc, shares, options.thirdPartyShare);
         const grandTotal = this.round(
             subtotal * Number(options.vehicles || 1)
         );
-        const affiliatePayout = this.calculateAffiliatePayout(grandTotal, shares, options.bookingType);
+        const affiliatePayout = this.calculateAffiliatePayout(grandTotal, shares, options.thirdPartyShare);
         console.log("Rate Distribution Calculation:", {
             AIR: this.round(air),
             TT: this.round(tt),
@@ -126,7 +126,7 @@ export class RateDistribution extends BookingFormGetters {
         let baseRate = vehicleBaseRates.baseRate.rate;
 
         if (
-            baseRateOptions.tripType === "CHARTER" &&
+            baseRateOptions.tripType === "charterTour" &&
             !baseRateOptions.minRateApplies
         ) {
             baseRate *= Number(baseRateOptions.hours || 0);
@@ -158,20 +158,20 @@ export class RateDistribution extends BookingFormGetters {
         }, 0);
     }
     //BASE RATE IN PREVIEW IS not just the AIR, Its AIR + 25%(AIR) + 25%(GRATUITY) + 25%(EA) WHICH HELPS in calculating shares
-    calculateShares(air, ea, gratuity, bookingType) {
+    calculateShares(air, ea, gratuity, thirdPartyShare) {
         let admin = 0;
         let farmout = 0;
         let ta = 0;
 
-        switch (bookingType) {
-            case "NORMAL":
+        switch (thirdPartyShare) {
+            case "none":
                 admin =
                     (air * 0.25) +
                     (gratuity * 0.25) +
                     (ea * 0.25);
                 break;
 
-            case "FARMOUT":
+            case "farmout":
                 farmout =
                     (air * 0.10) +
                     (ea * 0.10);
@@ -182,7 +182,7 @@ export class RateDistribution extends BookingFormGetters {
                     (ea * 0.15);
                 break;
 
-            case "TRAVEL_AGENT":
+            case "travel":
                 ta =
                     (air * 0.10) +
                     (ea * 0.10);
@@ -201,7 +201,7 @@ export class RateDistribution extends BookingFormGetters {
         };
     }
 
-    calculateSubtotal(air, tt, ea, mc, shares, bookingType) {
+    calculateSubtotal(air, tt, ea, mc, shares, thirdPartyShare) {
         let subtotal =
             air +
             tt +
@@ -209,25 +209,25 @@ export class RateDistribution extends BookingFormGetters {
             mc +
             shares.admin;
 
-        if (bookingType === "FARMOUT") {
+        if (thirdPartyShare === "farmout") {
             subtotal += shares.farmout;
         }
 
-        if (bookingType === "TRAVEL_AGENT") {
+        if (thirdPartyShare === "travel") {
             subtotal += shares.ta;
         }
 
         return this.round(subtotal);
     }
 
-    calculateAffiliatePayout(grandTotal, shares, bookingType) {
+    calculateAffiliatePayout(grandTotal, shares, thirdPartyShare) {
         let payout = grandTotal - shares.admin;
 
-        if (bookingType === "FARMOUT") {
+        if (thirdPartyShare === "farmout") {
             payout -= shares.farmout;
         }
 
-        if (bookingType === "TRAVEL_AGENT") {
+        if (thirdPartyShare === "travel") {
             payout -= shares.ta;
         }
 

@@ -1,0 +1,85 @@
+{
+  "bookingAction": {
+    "create": "create",
+    "edit": "edit",
+    "repeat": "repeat"
+  },
+  "serviceType": {
+    "oneWay": "oneWay",
+    "roundTrip": "roundTrip",
+    "charterTour": "charterTour"
+  },
+  "transferType": {
+    "cityToCity": "cityToCity",
+    "cityToAirport": "cityToAirport",
+    "airportToCity": "airportToCity",
+    "airportToAirport": "airportToAirport"
+  },
+  "clientAccountType": {
+    "individual": "individual",
+    "travelAgent": "travelAgent",
+    "looseCustomer": "looseCustomer"
+  },
+  "clientAccount": {
+    "individual": {
+      "clientName": "ELie"
+    },
+    "travelAgent": {
+      "clientName": "Test Travel Agent"
+    },
+    "looseCustomer": {
+      "firstName": "ELie",
+      "middleName": "Joe",
+      "lastName": "Desuza",
+      "emailPrefix": "ELie",
+      "phonePrefix": "70243",
+      "address": "1324 Windsor Ct",
+      "cardName": "ELie Desuza",
+      "cardNumber": "4000000000000077",
+      "expMonth": "12",
+      "expYear": "2027",
+      "cvv": "123"
+    }
+  },
+  "passengerInfo": {
+    "name": "Ananya-Pax",
+    "email": "ananya-pax@test.com",
+    "phone": "+919876543210",
+    "totalPax": "5",
+    "luggageCount": "2"
+  },
+  "bookingDetails": {
+    "pickupAddress": "1324 Windsor Ct",
+    "pickupAirport": "ORD",
+    "pickupAirline": "AA",
+    "pickupFlight": "AA98",
+    "originCity": "Chicago",
+    "dropoffAddress": "Loyola Outpatient Center",
+    "dropoffAirport": "JFK",
+    "dropoffAirline": "UA",
+    "dropoffFlight": "UA100"
+  },
+  "assignAffiliateTypeManually": {
+    "affiliate": {
+      "type": "affiliate",
+      "affiliate": "AutomatedWithPlaywright"
+    },
+    "looseAffiliate": {
+      "type": "looseAffiliate",
+      "looseAffiliate": "Test Loose Affiliate",
+      "looseAffiliateName": "John Doe",
+      "looseAffiliatePhone": "7024312345",
+      "looseAffiliateEmail": "john@example.com"
+    }
+  },
+  "thirdPartyShare": {
+    "none": "none",
+    "farmout": "farmout",
+    "travelagent": "travel"
+  },
+  "rateDistribution": {
+    "minRateApplies": false,
+    "hours": 1,
+    "vehicles": 1
+  }
+}

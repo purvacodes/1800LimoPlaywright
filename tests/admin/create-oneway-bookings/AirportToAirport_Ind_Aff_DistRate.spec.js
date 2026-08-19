@@ -7,7 +7,7 @@ test('Create AirportToAirport with Individual associated with affiliate having R
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
   await objectFactory.buildBookingObj.buildBooking({
-    action: 'create',
+    bookingAction: 'create',
     handler: objectFactory.handlerObj,
     serviceType: 'oneWay',
     transferType: 'airportToCity',
@@ -27,7 +27,7 @@ test('Create AirportToAirport with Individual associated with affiliate having R
     waitTime: 1500
   });
  await objectFactory.rateDistributionObj.calculateRateDistribution({
-        bookingType: "Normal",
+        thirdPartyShare: "none",
         tripType: "oneWay",
         minRateApplies: false,
         hours: 1,

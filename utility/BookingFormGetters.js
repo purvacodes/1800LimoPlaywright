@@ -101,6 +101,7 @@ export class BookingFormGetters {
             lastName: this.page.locator(this.locators.bookingForm.looseCustomer.last_name),
             email: this.page.locator(this.locators.bookingForm.looseCustomer.email),
             phone: this.page.locator(this.locators.bookingForm.looseCustomer.phone),
+            address: this.page.locator(this.locators.bookingForm.looseCustomer.address),
             cardName: this.page.locator(this.locators.bookingForm.looseCustomer.cardName),
             cardNumber: this.page.locator(this.locators.bookingForm.looseCustomer.cardNumber),
             expMonth: this.page.locator(this.locators.bookingForm.looseCustomer.expMonth),

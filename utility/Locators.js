@@ -75,6 +75,7 @@ export const Locators = {
             last_name: fc('last_name'),
             email: fc('email'),
             phone: fc('phone'),
+            address: placeholder('Type your address'),
             cardName: fc('name'),
             cardNumber: fc('card_number'),
             expMonth: fc('exp_month'),

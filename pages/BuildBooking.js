@@ -8,11 +8,11 @@ export class BuildBooking extends BookingFormGetters {
     /**
      * Build booking form from config object
      * @param {Object} config - Booking configuration
-     * @param {string} [config.action] - create, edit, repeat
+     * @param {string} [config.bookingAction] - create, edit, repeat
      * @param {string} [config.bookingNumber] - booking number for search before edit/repeat
      * @param {string} [config.serviceType] - oneWay, roundTrip, charterTour
      * @param {string} [config.transferType] - e.g., airportToCity, cityToCity, etc.
-     * @param {string} [config.clientAccount] - individual, travelAgent, looseCustomer
+     * @param {string} [config.clientAccountType] - individual, travelAgent, looseCustomer
      * @param {string} [config.clientName] - Name for individual/travelAgent selection
      * @param {string} [config.travelAgentClientType] - individual or looseCustomer (if clientAccount is travelAgent)
      * @param {Object} [config.passengerInfo] - { name, email, phone, totalPax, luggageCount }
@@ -24,8 +24,8 @@ export class BuildBooking extends BookingFormGetters {
     async buildBooking(config) {
         const wait = config.waitTime || 1000;
 
-        if (config.action) {
-            switch (config.action) {
+        if (config.bookingAction) {
+            switch (config.bookingAction) {
                 case 'create':
                     await this.adminCreateBooking();
                     break;
@@ -42,7 +42,7 @@ export class BuildBooking extends BookingFormGetters {
                     }
                     break;
                 default:
-                    throw new Error(`Unsupported action: ${config.action}`);
+                    throw new Error(`Unsupported bookingAction: ${config.bookingAction}`);
             }
 
             if (config.handler) {
@@ -61,9 +61,10 @@ export class BuildBooking extends BookingFormGetters {
             await this.page.waitForTimeout(wait);
         }
 
-        if (config.clientAccount) {
+        if (config.clientAccountType) {
             await this.selectClientAccount(
-                config.clientAccount,
+                config.clientAccountType,
+                config.clientAccountData,
                 config.clientName,
                 config.travelAgentClientType
             );
@@ -83,55 +84,13 @@ export class BuildBooking extends BookingFormGetters {
         }
 
         if (config.bookingDetails) {
-            const details = config.bookingDetails;
+            await this.fillBookingDetailsByTransferType(
+                config.transferType,
+                config.bookingDetails
+            );
 
-            if (details.pickupAddress) {
-                await this.selectPickupAddress(details.pickupAddress);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.pickupAirport) {
-                await this.selectPickupAirport(details.pickupAirport);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.pickupAirline) {
-                await this.selectPickupAirline(details.pickupAirline);
-                await this.page.waitForTimeout(wait);
-            }
-            if (details.pickupFlight) {
-                await this.selectPickupFlight(details.pickupFlight);
-                await this.page.waitForTimeout(wait);
-            }
-            if (details.originCity) {
-                await this.selectOriginCity(details.originCity);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.dropoffAddress) {
-                await this.selectDropOffAddress(details.dropoffAddress);
-                await this.page.waitForTimeout(wait);
-            }
-            if (details.dropoffAirport) {
-                await this.selectDropOffAirport(details.dropoffAirport);
-                await this.page.waitForTimeout(wait);
-            }
-            if (details.dropoffAirline) {
-                await this.selectDropOffAirline(details.dropoffAirline);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.dropoffFlight) {
-                await this.selectDropOffFlight(details.dropoffFlight);
-                await this.page.waitForTimeout(wait);
-            }
-
-            if (details.destinationCity) {
-                await this.selectDepartingCity(details.destinationCity);
-                await this.page.waitForTimeout(wait);
-            }
+            await this.page.waitForTimeout(wait);
         }
-
         if (config.affiliate) {
             const affiliate = config.affiliate;
             await this.assignAffiliateManually(
@@ -203,30 +162,43 @@ export class BuildBooking extends BookingFormGetters {
         await clientInput.fill(clientName);
         await this.selectFirstDropdownOption();
     }
-    async addLooseCustomer() {
-        const customer = this.looseCustomer;
+    async addLooseCustomer(customer) {
 
-        await customer.firstName.fill('John');
-        await customer.middleName.fill('M');
-        await customer.lastName.fill('Doe');
+        if (!customer) {
+            throw new Error(
+                'Loose customer data is required for clientAccountType: looseCustomer'
+            );
+        }
 
-        await customer.email.fill(
-            `john${Math.floor(Math.random() * 1000)}@example.com`
+        const looseCustomer = this.looseCustomer;
+
+        await looseCustomer.firstName.fill(customer.firstName);
+        await looseCustomer.middleName.fill(customer.middleName);
+        await looseCustomer.lastName.fill(customer.lastName);
+
+        await looseCustomer.email.fill(
+            `${customer.emailPrefix}${Date.now()}@yopmail.com`
         );
 
-        await customer.phone.fill(
-            `70243${Math.floor(10000 + Math.random() * 90000)}`
+        await looseCustomer.phone.fill(
+            `${customer.phonePrefix}${Math.floor(
+                10000 + Math.random() * 90000
+            )}`
         );
+        await looseCustomer.address.first().fill(customer.address);
+        await this.page.waitForTimeout(200);
+        await this.page.getByRole('button', { name: customer.address }).first().click()
 
-        await customer.cardName.fill('John Doe');
-        await customer.cardNumber.fill('4000000000000077');
-        await customer.expMonth.fill('12');
+        await looseCustomer.cardName.fill(customer.cardName);
+        await looseCustomer.cardNumber.fill(customer.cardNumber);
+        await looseCustomer.expMonth.fill(customer.expMonth);
 
-        await customer.expYear.click();
+        await looseCustomer.expYear.click();
         await this.page.locator('mat-option').first().click();
 
-        await customer.cvv.fill('123');
+        await looseCustomer.cvv.fill(customer.cvv);
     }
+
     async fillPaxDetails(name, email, phone, totalPax, luggageCount) {
         const pax = this.passengerInfo;
 
@@ -275,13 +247,13 @@ export class BuildBooking extends BookingFormGetters {
         await this.bookingDetails.pickupAddress.click();
         await this.bookingDetails.pickupAddress.fill(address);
         await this.page.waitForTimeout(2000);
-        await this.page.getByRole('button', { name: address }).click();
+        await this.page.getByRole('button', { name: address }).first().click();
     }
     async selectDropOffAddress(address) {
         await this.bookingDetails.dropoffAddress.click();
         await this.bookingDetails.dropoffAddress.fill(address);
         await this.page.waitForTimeout(2000);
-        await this.page.getByRole('button', { name: address }).click();
+        await this.page.getByRole('button', { name: address }).first().click();
     }
     async selectPickupAirport(address) {
         await this.bookingDetails.pickupAirport.click();
@@ -338,62 +310,114 @@ export class BuildBooking extends BookingFormGetters {
         await option.click();
     }
 
-    async selectClientAccount(clientAccountType, clientName, travelAgentClientType) {
+    async selectClientAccount(clientAccountType, clientAccountData, clientName, travelAgentClientType) {
         await this.selectClientAccountType(clientAccountType);
 
         switch (clientAccountType) {
+
             case 'individual':
-                await this.selectIndividualClient(clientName);
+                await this.selectIndividualClient(
+                    clientAccountData?.clientName || clientName
+                );
                 break;
 
             case 'travelAgent':
-                await this.selectTravelAgent(clientName);
-                await this.selectTravelAgentClientType(travelAgentClientType);
+                await this.selectTravelAgent(
+                    clientAccountData?.clientName || clientName
+                );
 
-                switch (travelAgentClientType) {
-                    case 'individual':
-                        await this.selectTravelAgentClient(clientName);
-                        break;
+                await this.selectTravelAgentClientType(
+                    travelAgentClientType
+                );
 
-                    default:
-                        await this.addLooseCustomer();
-                        break;
+                if (travelAgentClientType === 'individual') {
+                    await this.selectTravelAgentClient(
+                        clientName
+                    );
+                } else {
+                    await this.addLooseCustomer(clientAccountData);
                 }
                 break;
+
             case 'looseCustomer':
-                await this.addLooseCustomer();
+                await this.addLooseCustomer(clientAccountData);
                 break;
+
             default:
-                throw new Error(`Unsupported client account type: ${clientAccountType}`);
+                throw new Error(
+                    `Unsupported client account type: ${clientAccountType}`
+                );
         }
     }
 
 
-    async fillBookingDetailsByTransferType(transferType, pickupAddress, pickupAirline, pickupFlight, originCity, dropOffAddress, dropOffAirline, dropOffFlight) {
-        if (!transferType) throw new Error('transferType is required');
+    async fillBookingDetailsByTransferType(transferType, details) {
 
-        const t = transferType.toLowerCase();
-        // Pickup
-        if (t.startsWith('city')) {
-            await this.selectPickupAddress(pickupAddress);
-        } else if (t.startsWith('airport')) {
-            await this.selectPickupAirport(pickupAddress);
-            await this.selectPickupAirline(pickupAirline);
-            await this.selectPickupFlight(pickupFlight);
-            await this.selectOriginCity(originCity);
-        } else {
-            throw new Error(`Unsupported pickup transfer type: ${transferType}`);
+        if (!transferType) {
+            throw new Error('transferType is required');
         }
 
-        // Drop-off
-        if (t.endsWith('tocity')) {
-            await this.selectDropOffAddress(dropOffAddress);
-        } else if (t.endsWith('toairport')) {
-            await this.selectDropOffAirport(dropOffAddress);
-            await this.selectDropOffAirline(dropOffAirline);
-            await this.selectDropOffFlight(dropOffFlight);
+        if (!details) {
+            throw new Error('bookingDetails are required');
+        }
+        const t = transferType.toLowerCase();
+
+        // --------------------// Pickup // --------------------
+        if (t.startsWith('city')) {
+
+            await this.selectPickupAddress(
+                details.pickupAddress
+            );
+
+        } else if (t.startsWith('airport')) {
+
+            await this.selectPickupAirport(
+                details.pickupAirport
+            );
+
+            await this.selectPickupAirline(
+                details.pickupAirline
+            );
+
+            await this.selectPickupFlight(
+                details.pickupFlight
+            );
+
+            await this.selectOriginCity(
+                details.originCity
+            );
+
         } else {
-            throw new Error(`Unsupported drop-off transfer type: ${transferType}`);
+            throw new Error(
+                `Unsupported pickup transfer type: ${transferType}`
+            );
+        }
+
+        // -------------------- // Drop-off // --------------------
+        if (t.endsWith('tocity')) {
+
+            await this.selectDropOffAddress(
+                details.dropoffAddress
+            );
+
+        } else if (t.endsWith('toairport')) {
+
+            await this.selectDropOffAirport(
+                details.dropoffAirport
+            );
+
+            await this.selectDropOffAirline(
+                details.dropoffAirline
+            );
+
+            await this.selectDropOffFlight(
+                details.dropoffFlight
+            );
+
+        } else {
+            throw new Error(
+                `Unsupported drop-off transfer type: ${transferType}`
+            );
         }
     }
 
@@ -423,10 +447,7 @@ export class BuildBooking extends BookingFormGetters {
 
     async getPreviewBookingDetails() {
         await this.previewBooking();
-
         const adminShareValue = await this.previewBookingInfo.adminShare.textContent();
-    
-
         const parseCurrency = (value) =>
             Number((value || '').replace(/[$,%\s]/g, '') || 0);
         return {

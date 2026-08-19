@@ -7,7 +7,7 @@ test('Create AirportToAirport with Individual associated with affiliate having R
   await objectFactory.signUpSignInObj.authenticateAccount('admin', objectFactory.credObj.login.admin_no);
   await page.waitForTimeout(2000);
   await objectFactory.buildBookingObj.buildBooking({
-    action: 'edit',
+    bookingAction: 'edit',
     bookingNumber: '3216',
     handler: objectFactory.handlerObj,
     serviceType: 'oneWay',
