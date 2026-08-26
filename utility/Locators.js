@@ -4,10 +4,10 @@ const optionText = (text) => `//mat-option//span[contains(text(),"${text}")]`;
 const optionValue = (value) => `//mat-option[@value="${value}"]`;
 const inputValue = (value) => `input[value="${value}"]`;
 const placeholder = (text) => `input[placeholder="${text}"]`;
-const dropdownWithPlaceholder = (text) => `.ng-value-container:has(.ng-placeholder:has-text("${text}"))`;
 const href = (path) => `//a[@href="${path}"]`;
 const id = (value) => `#${value}`;
 const matLabelContains = (text) => `//mat-label[normalize-space()="${text}"]/ancestor::mat-form-field[1]//mat-select`;
+
 const btn = (text) => `//button[normalize-space()="${text}"]`;
 const rateInput = (text) =>
     `//mat-label[normalize-space()="${text}"]` +
@@ -17,7 +17,6 @@ const rateAmount = (text) =>
     `//mat-label[normalize-space()="${text}"]` +
     `/ancestor::div[contains(@class,"rates-row")]` +
     `//div[contains(@class,"rate-amount")]//p`;
-
 
 const distribution = (text) =>
     `//p[contains(normalize-space(), "${text}")]` +
@@ -39,7 +38,7 @@ export const Locators = {
         phoneInput: fc('phone')
     },
 
-    bookingForm: {
+    buildbookingform: {
         serviceType: fc('service_type'),
 
         oneWay: optionValue('one_way'),
@@ -58,14 +57,14 @@ export const Locators = {
         cruisePortToCity: optionText('Cruise Port To City ?'),
 
         clientAccounts: {
-            individual: `(${label('Individual')})[1]`,
-            travelAgent: label('Travel Advisor'),
+            selectAccount: fc('acc_id'),
+            individual: inputValue('individual'),
+            travelAgent: inputValue('travel_planner'),
             travelAgentIndividual: inputValue('travel_individual'),
             travelAgentLooseCustomer: inputValue('travel_loose_customer'),
-            looseCustomer: label('Loose Customer'),
+            looseCustomer: inputValue('loose_customer'),
 
             selectTravelAgentClient: fc('travel_client_id'),
-            selectAccount: fc('acc_id'),
             selectRandom: 'div[role="option"]',
         },
 
@@ -91,21 +90,17 @@ export const Locators = {
             luggageCount: fc('luggage_count')
         },
 
-        affiliate_type: {
-            affiliate: label('Affiliate'),
-            looseAffiliate: label('Loose Affiliate')
+        affiliateAccount: {
+            selectAffiliate: label('Affiliate'),
+            selectLooseAffiliate: label('Loose Affiliate'),
+            affiliateList: fc('affiliate_id'),
+            looseAffiliateList: fc('loose_affiliate_id'),
+            looseAffiliateName: fc('lose_affiliate_name'),
+            looseAffiliatePhone: fc('lose_affiliate_phone'),
+            looseAffiliateEmail: fc('lose_affiliate_email')
         },
 
-        affiliateList: fc('affiliate_id'),
-        looseAffiliateList: fc('loose_affiliate_id'),
-
-        looseAffiliate: {
-            looseAffiliateName: fc('loose_affiliate_name'),
-            looseAffiliatePhone: fc('loose_affiliate_phone'),
-            looseAffiliateEmail: fc('loose_affiliate_email')
-        },
-
-        vehiclePreference: {
+        vehiclePreferences: {
             vehicleType: fc('vehicle_type'),
             vehicleMake: fc('vehicle_make'),
             vehicleModel: fc('vehicle_model'),
@@ -118,7 +113,8 @@ export const Locators = {
 
         bookingDetails: {
             meetGreet: fc('meet_greet_choices'),
-            numberOfVehicles: placeholder('Number of Vehicles'),
+            //numberOfVehicles: placeholder('Number of Vehicles'),
+            numberOfVehicles: `input[placholder="Number of Vehicles"]`,
 
             pickupDate: fc('pickup_date'),
             pickupTime: fc('pickup_time'),
@@ -148,17 +144,30 @@ export const Locators = {
             bookingInstructions: fc('booking_instructions'),
             returnBookingInstructions: fc('return_booking_instructions'),
 
-            totalDistance: 'h6:has-text("Total Distance:")',
-            estimatedTime: 'h6:has-text("Estimated Time:")',
+            totalDistance: '.bk-route-panel__stat:has(i.bi-signpost-2)',
+            estimatedTime: '.bk-route-panel__stat:has(i.bi-clock)',
             browseVehicles: btn('Browse vehicles'),
             assignManually: btn('Assign manually')
-        },
-
-        accountListing: {
-            clientAccount:  dropdownWithPlaceholder('Select Client Account'),
-            affiliate: dropdownWithPlaceholder('Select Affiliate'),
-            accountDropdownSelectedValue: '.ng-value .ng-value-label',
         }
+
+    },
+
+    fetchBookingDetails: {
+        serviceTypeValue: fc('service_type') + ' .mat-mdc-select-min-line',
+        transferTypeValue: matLabelContains('Transfer Type') + '//span[contains(@class,"mat-mdc-select-min-line")]',
+        clientAccountType: fc('account_type') + ' ' + 'input[type="radio"]:checked',
+        travelClientType: fc('travel_client_acc') + ' ' + 'input[type="radio"]:checked',
+        clientAccountValue: fc('acc_id') + ' ' + '.ng-value .ng-value-label',
+        travelClientValue: fc('travel_client_id') + ' ' + '.ng-value .ng-value-label',
+        affiliateType: fc('affiliate_type') + ' ' + 'mat-radio-button.mat-mdc-radio-checked',
+        affiliateValue: fc('affiliate_id') + ' ' + '.ng-value .ng-value-label',
+        looseAffiliateValue: fc('loose_affiliate_id') + ' ' + '.ng-value .ng-value-label',
+        vehicleTypeValue: fc('vehicle_type') + ' .ng-value',
+        vehicleMakeValue: fc('vehicle_make') + ' .ng-value',
+        vehicleModelValue: fc('vehicle_model') + ' .ng-value',
+        vehicleYearValue: fc('vehicle_year') + ' .ng-value',
+        vehicleColorValue: fc('vehicle_color') + ' .ng-value',
+        cancellationPolicyValue: fc('cancellation_hours') + ' .ng-value',
     },
 
     bookingActions: {

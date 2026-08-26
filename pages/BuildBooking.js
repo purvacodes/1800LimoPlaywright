@@ -115,7 +115,6 @@ export class BuildBooking extends BookingFormGetters {
     }
 
     async adminEditBooking(bookingNumber) {
-        console.log(`Editing booking with Number: ${bookingNumber}`);
         await this.bookingActions.adminEditBooking(bookingNumber).click();
     }
 
@@ -211,25 +210,25 @@ export class BuildBooking extends BookingFormGetters {
 
     async selectAffiliateType(type) {
         console.log(`Selecting affiliate type: ${type}`);
-        await this.selectOption(this.affiliate.options, type, 'affiliate type');
+        await this.selectOption(affiliateAccount.options, type, 'affiliate type');
     }
 
     async selectAffiliate(affiliate) {
-        await this.affiliate.affiliateList.click();
-        await this.affiliate.affiliateList.locator('input').fill(affiliate);
+        await this.affiliateAccount.affiliateList.click();
+        await this.affiliateAccount.affiliateList.locator('input').fill(affiliate);
         await this.selectFirstDropdownOption();
     }
 
     async selectLooseAffiliate(looseAffiliate) {
-        await this.affiliate.looseAffiliateList.click();
-        await this.affiliate.looseAffiliateList.locator('input').fill(looseAffiliate);
+        await this.affiliateAccount.looseAffiliateList.click();
+        await this.affiliateAccount.looseAffiliateList.locator('input').fill(looseAffiliate);
         await this.selectFirstDropdownOption();
     }
 
     async fillLooseAffiliateDetails(name, phone, email) {
-        await this.looseAffiliate.name.fill(name);
-        await this.looseAffiliate.phone.fill(phone);
-        await this.looseAffiliate.email.fill(email);
+        await this.affiliateAccount.looseAffiliateName.fill(name);
+        await this.affiliateAccount.looseAffiliatePhone.fill(phone);
+        await this.affiliateAccount.looseAffiliateEmail.fill(email);
     }
 
     async selectTravelDate() {
@@ -451,7 +450,6 @@ export class BuildBooking extends BookingFormGetters {
         const parseCurrency = (value) =>
             Number((value || '').replace(/[$,%\s]/g, '') || 0);
         return {
-
             adminShare: parseCurrency(adminShareValue)
         };
     }

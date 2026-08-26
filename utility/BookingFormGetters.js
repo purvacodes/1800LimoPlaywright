@@ -23,26 +23,26 @@ export class BookingFormGetters {
 
     get serviceType() {
         return {
-            dropdown: this.page.locator(this.locators.bookingForm.serviceType),
+            dropdown: this.page.locator(this.locators.buildbookingform.serviceType),
             options: {
-                oneWay: this.page.locator(this.locators.bookingForm.oneWay),
-                roundTrip: this.page.locator(this.locators.bookingForm.roundTrip),
-                charterTour: this.page.locator(this.locators.bookingForm.charterTour),
+                oneWay: this.page.locator(this.locators.buildbookingform.oneWay),
+                roundTrip: this.page.locator(this.locators.buildbookingform.roundTrip),
+                charterTour: this.page.locator(this.locators.buildbookingform.charterTour),
             }
         };
     }
     get transferType() {
         return {
-            dropdown: this.page.locator(this.locators.bookingForm.transferType),
+            dropdown: this.page.locator(this.locators.buildbookingform.transferType),
             options: {
-                cityToCity: this.page.locator(this.locators.bookingForm.cityToCity),
-                cityToAirport: this.page.locator(this.locators.bookingForm.cityToAirport),
-                airportToCity: this.page.locator(this.locators.bookingForm.airportToCity),
-                airportToAirport: this.page.locator(this.locators.bookingForm.airportToAirport),
-                airportToCruisePort: this.page.locator(this.locators.bookingForm.airportToCruisePort),
-                cityToCruisePort: this.page.locator(this.locators.bookingForm.cityToCruisePort),
-                cruisePortToAirport: this.page.locator(this.locators.bookingForm.cruisePortToAirport),
-                cruisePortToCity: this.page.locator(this.locators.bookingForm.cruisePortToCity),
+                cityToCity: this.page.locator(this.locators.buildbookingform.cityToCity),
+                cityToAirport: this.page.locator(this.locators.buildbookingform.cityToAirport),
+                airportToCity: this.page.locator(this.locators.buildbookingform.airportToCity),
+                airportToAirport: this.page.locator(this.locators.buildbookingform.airportToAirport),
+                airportToCruisePort: this.page.locator(this.locators.buildbookingform.airportToCruisePort),
+                cityToCruisePort: this.page.locator(this.locators.buildbookingform.cityToCruisePort),
+                cruisePortToAirport: this.page.locator(this.locators.buildbookingform.cruisePortToAirport),
+                cruisePortToCity: this.page.locator(this.locators.buildbookingform.cruisePortToCity),
             }
         };
     }
@@ -50,19 +50,19 @@ export class BookingFormGetters {
     get passengerInfo() {
         return {
             passengerName: this.page.locator(
-                this.locators.bookingForm.passengerInfo.passengerName
+                this.locators.buildbookingform.passengerInfo.passengerName
             ),
             passengerEmail: this.page.locator(
-                this.locators.bookingForm.passengerInfo.passengerEmail
+                this.locators.buildbookingform.passengerInfo.passengerEmail
             ),
             passengerPhone: this.page.locator(
-                this.locators.bookingForm.passengerInfo.passengerPhone
+                this.locators.buildbookingform.passengerInfo.passengerPhone
             ),
             totalPax: this.page.locator(
-                this.locators.bookingForm.passengerInfo.totalPax
+                this.locators.buildbookingform.passengerInfo.totalPax
             ),
             luggageCount: this.page.locator(
-                this.locators.bookingForm.passengerInfo.luggageCount
+                this.locators.buildbookingform.passengerInfo.luggageCount
             ),
         };
     }
@@ -70,102 +70,101 @@ export class BookingFormGetters {
     get clientAccounts() {
         return {
             dropdown: this.page.locator(
-                this.locators.bookingForm.clientAccounts.selectAccount
+                this.locators.buildbookingform.clientAccounts.selectAccount
             ),
             selectTravelAgentClient: this.page.locator(
-                this.locators.bookingForm.clientAccounts.selectTravelAgentClient
+                this.locators.buildbookingform.clientAccounts.selectTravelAgentClient
             ),
-
             options: {
-                individual: this.page.locator(this.locators.bookingForm.clientAccounts.individual),
-                travelAgent: this.page.locator(this.locators.bookingForm.clientAccounts.travelAgent),
-                looseCustomer: this.page.locator(this.locators.bookingForm.clientAccounts.looseCustomer),
-                travelAgentIndividual: this.page.locator(this.locators.bookingForm.clientAccounts.travelAgentIndividual),
-                travelAgentLooseCustomer: this.page.locator(this.locators.bookingForm.clientAccounts.travelAgentLooseCustomer),
+                individual: this.page.locator(this.locators.buildbookingform.clientAccounts.individual),
+                travelAgent: this.page.locator(this.locators.buildbookingform.clientAccounts.travelAgent),
+                looseCustomer: this.page.locator(this.locators.buildbookingform.clientAccounts.looseCustomer),
+                travelAgentIndividual: this.page.locator(this.locators.buildbookingform.clientAccounts.travelAgentIndividual),
+                travelAgentLooseCustomer: this.page.locator(this.locators.buildbookingform.clientAccounts.travelAgentLooseCustomer),
             }
-        };
-    }
-
-    get accountListing() {
-        return {
-            clientAccount: this.page.locator(this.locators.bookingForm.accountListing.clientAccount),
-            affiliate: this.page.locator(this.locators.bookingForm.accountListing.affiliate),
-            accountDropdownSelectedValue: this.page.locator(this.locators.bookingForm.accountListing.accountDropdownSelectedValue),
         };
     }
 
     get looseCustomer() {
         return {
-            firstName: this.page.locator(this.locators.bookingForm.looseCustomer.first_name),
-            middleName: this.page.locator(this.locators.bookingForm.looseCustomer.middle_name),
-            lastName: this.page.locator(this.locators.bookingForm.looseCustomer.last_name),
-            email: this.page.locator(this.locators.bookingForm.looseCustomer.email),
-            phone: this.page.locator(this.locators.bookingForm.looseCustomer.phone),
-            address: this.page.locator(this.locators.bookingForm.looseCustomer.address),
-            cardName: this.page.locator(this.locators.bookingForm.looseCustomer.cardName),
-            cardNumber: this.page.locator(this.locators.bookingForm.looseCustomer.cardNumber),
-            expMonth: this.page.locator(this.locators.bookingForm.looseCustomer.expMonth),
-            expYear: this.page.locator(this.locators.bookingForm.looseCustomer.expYear),
-            cvv: this.page.locator(this.locators.bookingForm.looseCustomer.cvv),
+            firstName: this.page.locator(this.locators.buildbookingform.looseCustomer.first_name),
+            middleName: this.page.locator(this.locators.buildbookingform.looseCustomer.middle_name),
+            lastName: this.page.locator(this.locators.buildbookingform.looseCustomer.last_name),
+            email: this.page.locator(this.locators.buildbookingform.looseCustomer.email),
+            phone: this.page.locator(this.locators.buildbookingform.looseCustomer.phone),
+            address: this.page.locator(this.locators.buildbookingform.looseCustomer.address),
+            cardName: this.page.locator(this.locators.buildbookingform.looseCustomer.cardName),
+            cardNumber: this.page.locator(this.locators.buildbookingform.looseCustomer.cardNumber),
+            expMonth: this.page.locator(this.locators.buildbookingform.looseCustomer.expMonth),
+            expYear: this.page.locator(this.locators.buildbookingform.looseCustomer.expYear),
+            cvv: this.page.locator(this.locators.buildbookingform.looseCustomer.cvv),
         };
     }
 
-
-    get affiliate() {
+    get affiliateAccount() {
         return {
             options: {
-                affiliate: this.page.locator(this.locators.bookingForm.affiliate_type.affiliate),
-                looseAffiliate: this.page.locator(this.locators.bookingForm.affiliate_type.looseAffiliate),
+                affiliate: this.page.locator(this.locators.buildbookingform.affiliateAccount.selectAffiliate),
+                looseAffiliate: this.page.locator(this.locators.buildbookingform.affiliateAccount.selectLooseAffiliate),
             },
-            affiliateList: this.page.locator(this.locators.bookingForm.affiliateList),
-            looseAffiliateList: this.page.locator(this.locators.bookingForm.looseAffiliateList),
-        };
-    }
-
-    get looseAffiliate() {
-        return {
-            name: this.page.locator(this.locators.bookingForm.looseAffiliate.looseAffiliateName),
-            phone: this.page.locator(this.locators.bookingForm.looseAffiliate.looseAffiliatePhone),
-            email: this.page.locator(this.locators.bookingForm.looseAffiliate.looseAffiliateEmail),
+            affiliateList: this.page.locator(this.locators.buildbookingform.affiliateAccount.affiliateList),
+            looseAffiliateList: this.page.locator(this.locators.buildbookingform.affiliateAccount.looseAffiliateList),
+            looseAffiliateName: this.page.locator(this.locators.buildbookingform.affiliateAccount.looseAffiliateName),
+            looseAffiliatePhone: this.page.locator(this.locators.buildbookingform.affiliateAccount.looseAffiliatePhone),
+            looseAffiliateEmail: this.page.locator(this.locators.buildbookingform.affiliateAccount.looseAffiliateEmail),
         };
     }
 
     get bookingDetails() {
         return {
-            meetGreet: this.page.locator(this.locators.bookingForm.bookingDetails.meetGreet),
-            numberOfVehicles: this.page.locator(this.locators.bookingForm.bookingDetails.numberOfVehicles),
 
-            pickupDate: this.page.locator(this.locators.bookingForm.bookingDetails.pickupDate),
-            pickupTime: this.page.locator(this.locators.bookingForm.bookingDetails.pickupTime),
+            meetGreet: this.page.locator(this.locators.buildbookingform.bookingDetails.meetGreet),
+            numberOfVehicles: this.page.locator(this.locators.buildbookingform.bookingDetails.numberOfVehicles),
 
-            pickupAddress: this.page.locator(this.locators.bookingForm.bookingDetails.pickupAddress),
-            dropoffAddress: this.page.locator(this.locators.bookingForm.bookingDetails.dropoffAddress),
-            returnPickupAddress: this.page.locator(this.locators.bookingForm.bookingDetails.returnPickupAddress),
-            returnDropoffAddress: this.page.locator(this.locators.bookingForm.bookingDetails.returnDropoffAddress),
+            pickupDate: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupDate),
+            pickupTime: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupTime),
 
-            pickupAirport: this.page.locator(this.locators.bookingForm.bookingDetails.pickupAirport),
-            dropoffAirport: this.page.locator(this.locators.bookingForm.bookingDetails.dropoffAirport),
-            returnPickupAirport: this.page.locator(this.locators.bookingForm.bookingDetails.returnPickupAirport),
-            returnDropoffAirport: this.page.locator(this.locators.bookingForm.bookingDetails.returnDropoffAirport),
+            pickupAddress: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupAddress),
+            dropoffAddress: this.page.locator(this.locators.buildbookingform.bookingDetails.dropoffAddress),
+            returnPickupAddress: this.page.locator(this.locators.buildbookingform.bookingDetails.returnPickupAddress),
+            returnDropoffAddress: this.page.locator(this.locators.buildbookingform.bookingDetails.returnDropoffAddress),
 
-            pickupAirline: this.page.locator(this.locators.bookingForm.bookingDetails.pickupAirline),
-            dropoffAirline: this.page.locator(this.locators.bookingForm.bookingDetails.dropoffAirline),
-            returnPickupAirline: this.page.locator(this.locators.bookingForm.bookingDetails.returnPickupAirline),
-            returnDropoffAirline: this.page.locator(this.locators.bookingForm.bookingDetails.returnDropoffAirline),
+            pickupAirport: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupAirport),
+            dropoffAirport: this.page.locator(this.locators.buildbookingform.bookingDetails.dropoffAirport),
+            returnPickupAirport: this.page.locator(this.locators.buildbookingform.bookingDetails.returnPickupAirport),
+            returnDropoffAirport: this.page.locator(this.locators.buildbookingform.bookingDetails.returnDropoffAirport),
 
-            pickupFlight: this.page.locator(this.locators.bookingForm.bookingDetails.pickupFlight),
-            dropoffFlight: this.page.locator(this.locators.bookingForm.bookingDetails.dropoffFlight),
-            returnPickupFlight: this.page.locator(this.locators.bookingForm.bookingDetails.returnPickupFlight),
-            returnDropoffFlight: this.page.locator(this.locators.bookingForm.bookingDetails.returnDropoffFlight),
+            pickupAirline: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupAirline),
+            dropoffAirline: this.page.locator(this.locators.buildbookingform.bookingDetails.dropoffAirline),
+            returnPickupAirline: this.page.locator(this.locators.buildbookingform.bookingDetails.returnPickupAirline),
+            returnDropoffAirline: this.page.locator(this.locators.buildbookingform.bookingDetails.returnDropoffAirline),
 
-            originCity: this.page.locator(this.locators.bookingForm.bookingDetails.originCity),
-            destinationCity: this.page.locator(this.locators.bookingForm.bookingDetails.destinationCity),
-            bookingInstructions: this.page.locator(this.locators.bookingForm.bookingDetails.bookingInstructions),
-            returnBookingInstructions: this.page.locator(this.locators.bookingForm.bookingDetails.returnBookingInstructions),
-            totalDistance: this.page.locator(this.locators.bookingForm.bookingDetails.totalDistance),
-            estimatedTime: this.page.locator(this.locators.bookingForm.bookingDetails.estimatedTime),
-            browseVehicles: this.page.locator(this.locators.bookingForm.bookingDetails.browseVehicles),
-            assignManually: this.page.locator(this.locators.bookingForm.bookingDetails.assignManually),
+            pickupFlight: this.page.locator(this.locators.buildbookingform.bookingDetails.pickupFlight),
+            dropoffFlight: this.page.locator(this.locators.buildbookingform.bookingDetails.dropoffFlight),
+            returnPickupFlight: this.page.locator(this.locators.buildbookingform.bookingDetails.returnPickupFlight),
+            returnDropoffFlight: this.page.locator(this.locators.buildbookingform.bookingDetails.returnDropoffFlight),
+
+            originCity: this.page.locator(this.locators.buildbookingform.bookingDetails.originCity),
+            destinationCity: this.page.locator(this.locators.buildbookingform.bookingDetails.destinationCity),
+            bookingInstructions: this.page.locator(this.locators.buildbookingform.bookingDetails.bookingInstructions),
+            returnBookingInstructions: this.page.locator(this.locators.buildbookingform.bookingDetails.returnBookingInstructions),
+            totalDistance: this.page.locator(this.locators.buildbookingform.bookingDetails.totalDistance),
+            estimatedTime: this.page.locator(this.locators.buildbookingform.bookingDetails.estimatedTime),
+            browseVehicles: this.page.locator(this.locators.buildbookingform.bookingDetails.browseVehicles),
+            assignManually: this.page.locator(this.locators.buildbookingform.bookingDetails.assignManually),
+        };
+    }
+
+    get vehiclePreferences() {
+        return {
+            vehicleType: this.page.locator(this.locators.buildbookingform.vehiclePreferences.vehicleType),
+            vehicleMake: this.page.locator(this.locators.buildbookingform.vehiclePreferences.vehicleMake),
+            vehicleModel: this.page.locator(this.locators.buildbookingform.vehiclePreferences.vehicleModel),
+            vehicleYear: this.page.locator(this.locators.buildbookingform.vehiclePreferences.vehicleYear),
+            vehicleColor: this.page.locator(this.locators.buildbookingform.vehiclePreferences.vehicleColor),
+            licensePlate: this.page.locator(this.locators.buildbookingform.vehiclePreferences.licensePlate),
+            seats: this.page.locator(this.locators.buildbookingform.vehiclePreferences.seats),
+            cancellationPolicy: this.page.locator(this.locators.buildbookingform.vehiclePreferences.cancellationPolicy),
         };
     }
 
@@ -271,4 +270,23 @@ export class BookingFormGetters {
         };
     }
 
+    get fetchBookingDetails() {
+        return {
+            serviceType: this.page.locator(this.locators.fetchBookingDetails.serviceTypeValue),
+            transferType: this.page.locator(this.locators.fetchBookingDetails.transferTypeValue),
+            clientAccountType: this.page.locator(this.locators.fetchBookingDetails.clientAccountType),
+            clientAccount: this.page.locator(this.locators.fetchBookingDetails.clientAccountValue),
+            travelClientType: this.page.locator(this.locators.fetchBookingDetails.travelClientType),
+            travelClient: this.page.locator(this.locators.fetchBookingDetails.travelClientValue),
+            affiliateType: this.page.locator(this.locators.fetchBookingDetails.affiliateType),
+            affiliate: this.page.locator(this.locators.fetchBookingDetails.affiliateValue),
+            looseAffiliate: this.page.locator(this.locators.fetchBookingDetails.looseAffiliateValue),
+            vehicleType: this.page.locator(this.locators.fetchBookingDetails.vehicleTypeValue),
+            vehicleMake: this.page.locator(this.locators.fetchBookingDetails.vehicleMakeValue),
+            vehicleModel: this.page.locator(this.locators.fetchBookingDetails.vehicleModelValue),
+            vehicleYear: this.page.locator(this.locators.fetchBookingDetails.vehicleYearValue),
+            vehicleColor: this.page.locator(this.locators.fetchBookingDetails.vehicleColorValue),
+            cancellationPolicy: this.page.locator(this.locators.fetchBookingDetails.cancellationPolicyValue),
+        };
+    }
 }
